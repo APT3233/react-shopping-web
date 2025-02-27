@@ -1,28 +1,33 @@
 import { useRoutes } from "react-router-dom";
 import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
-import DefaultLayout from "../components/Layout/DefaultLayout";
+import DefaultLayout from "../components/Layout/DefaultLayout/DefaultLayout";
 import Error from "../pages/Error404";
 import AdminLayout from "../components/Layout/AdminLayout/AdminLayout";
 import Dashboard from "../pages/admin/Dashboard";
 
-
 const routes = [
   {
     path: "/",
-    element: <DefaultLayout />
+    element: <DefaultLayout />,
+    children: [
+      {
+        path: "/home",
+        element: <DefaultLayout />,
+      },
+    ],
   },
   {
     path: "/sign-in",
-    element: <SignIn />
+    element: <SignIn />,
   },
   {
     path: "/sign-up",
-    element: <SignUp />
+    element: <SignUp />,
   },
   {
     path: "*",
-    element: <Error />
+    element: <Error />,
   },
 
   // Private Router
@@ -42,16 +47,13 @@ const routes = [
     children: [
       {
         index: true,
-        element: <Dashboard />
-      }
-    ]
+        element: <Dashboard />,
+      },
+    ],
   },
- 
-
-]
-
+];
 
 export default function AllRoute() {
-  const router = useRoutes(routes)
-  return <>{router}</>
+  const router = useRoutes(routes);
+  return <>{router}</>;
 }
