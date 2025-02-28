@@ -3,6 +3,190 @@
   max-width: 85%;
   margin: 20px auto;
 }
+
+/* Banner-main */
+
+/* Banner-content */
+.banner-main__content, .banner-right__content{
+  position: relative;
+  user-select: none; 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.banner-right-title,
+.banner-right-sale,
+.banner-right-btn,
+.banner-content-title,
+.banner-content-des,
+.banner-content-btn,
+.banner-content-type,
+.banner-content-sale {
+  position: absolute;
+  user-select: none; 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.banner-content-type,
+.banner-right-sale,
+.banner-content-sale {
+  color: rgba(0, 0, 0, 0.788); 
+  text-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.5);
+}
+
+.banner-content-title {
+  top: 90px; 
+  left: 100px;
+  font-size: 1.5rem; 
+}
+.banner-content-type {
+  top: 130px;
+  left: 100px;
+  font-size: 2.5rem; 
+}
+.banner-content-sale {
+  top: 190px;
+  left: 100px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+.banner-content-sale h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+.banner-content-des {
+  top: 230px;
+  left: 100px;
+  font-size: 1rem;
+}
+.banner-content-btn{
+  top: 280px;
+  left: 100px;
+}
+.banner-content-btn Button{
+  background-color: #202738;
+  width: 150px;
+  height: 40px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+}
+.banner-content-btn Button:hover{
+  background-color: rgb(49, 61, 78)!important;
+}
+
+@media (max-width: 600px) {
+  .banner-content-title{
+    top: 20px;
+    left: 20px;
+    font-size: 0.75rem;
+  }
+  .banner-content-type{
+    top: 30px;
+    left: 20px;
+  }
+  .banner-content-sale{
+    top: 80px;
+    left: 20px;
+    font-size: 0.7rem;
+  }
+  .banner-content-sale h1{
+    font-size: 0.9rem;
+  }
+  .banner-content-des{
+    top: 100px;
+    left: 20px;
+    font-size: 0.5rem;
+  }
+  .banner-content-btn{
+    top: 120px;
+    left: 20px;
+  }
+  .banner-content-btn Button{
+    width: 70px;
+    height: 27px;
+    font-size: 0.7rem;
+  }
+}
+
+.banner-right-title {
+  top: 50px;
+  left: 25px;
+  font-family: "Public Sans", "Public Sans Fallback";
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 13px;
+  letter-spacing: 1.2px;
+}
+.banner-right-sale{
+  width: 150px;
+  top: 70px;
+  left: 25px;
+  margin: 0px 0px 16px;
+  font-weight: 500;
+  font-family: "Public Sans", "Public Sans Fallback";
+  line-height: 1.235;
+  font-size: 20px;
+  letter-spacing: 1.2px;
+}
+.banner-right-btn {
+  top: 160px;
+  left: 25px;
+  font-size: 15px;
+  font-family: "Public Sans", "Public Sans Fallback";
+  color: rgb(31, 41, 55);
+  font-weight: 800;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 10px; 
+  color: #202738;
+  display: inline-block; 
+  transition: all 0.3s ease; 
+
+}
+.banner-right-btn:hover {
+  background-color: rgb(49, 61, 78); 
+  color: #fff; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  transform: scale(1.05);
+}
+@media (max-width: 600px) {
+  .banner-right-title{
+    top: 10px;
+    left: 10px;
+    font-size: 0.55rem;
+  }
+  .banner-right-sale{
+    top: 30px;
+    left: 10px;
+    font-size: 0.7rem;
+    width: 95px;
+  }
+  .banner-right-btn{
+    width: 50px;
+    top: 70px;
+    text-align: center;
+    left: 10px;
+    font-size: 0.35rem;
+  }
+}
+
+/* End Banner-content */
+
+.banner-main__img {
+  width: 1250px;
+  height: 500px;
+  objectFit: cover;
+  border-radius: 20px;  
+  overflow: hidden;
+}
+.banner-right__img{
+  border-radius: 10px;
+  width: 100%;
+  margin-left: 0px;
+}
 .banner-right{
   display: flex;
   justify-content: center;
@@ -10,20 +194,9 @@
   flex-direction: column;
   gap: 17px;
 }
-/* Banner-main */
-
-.banner-main {
-  width: 1150px;
-  height: 500px;
-  objectFit: cover;
-  border-radius: 20px;  
-}
-.banner-right__img{
-  border-radius: 10px;
-}
 
 @media (max-width: 600px) {
-  .banner-main{
+  .banner-main__img{
     width: 100%;
     height: auto;
   }
@@ -34,6 +207,8 @@
   .banner-right__img{
     width: 160px;
   }
+
+  
 }
 @media (max-width: 1200px) {
   .banner-main {
