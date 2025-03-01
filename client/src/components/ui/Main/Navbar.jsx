@@ -46,12 +46,12 @@ const Navbar = () => {
           tabIndex={-1}
         >
           <List>
-            {["Home", "Product", "Cart", "Contact", "Profile"].map((text) => (
+            {["Home", "Product", "Cart", "Contact", "Login"].map((text) => (
               <ListItem
                 key={text}
                 button
                 component={NavLink} 
-                to={`/${text.toLowerCase()}`} 
+                to={text === "Home" ? "/" : `${text.toLowerCase()}`}
                 style={{
                   textDecoration: "none",
                   color: "black",

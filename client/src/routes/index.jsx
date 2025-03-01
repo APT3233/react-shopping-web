@@ -5,6 +5,11 @@ import DefaultLayout from "../components/Layout/DefaultLayout/DefaultLayout";
 import Error from "../pages/Error404";
 import AdminLayout from "../components/Layout/AdminLayout/AdminLayout";
 import Dashboard from "../pages/admin/Dashboard";
+import Product from "../pages/product";
+import Home from "../pages/home";
+import Cart from "../pages/cart";
+import Contact from "../pages/contact";
+import CheckOut from "../pages/check-out";
 
 const routes = [
   {
@@ -12,9 +17,25 @@ const routes = [
     element: <DefaultLayout />,
     children: [
       {
-        path: "/home",
-        element: <DefaultLayout />,
+        index: true,
+        element: <Home />,
       },
+      {
+        path: "product",
+        element: <Product />
+      },
+      {
+        path: "cart",
+        element: <Cart />
+      },
+      {
+        path: "contact",
+        element: <Contact />
+      },
+      {
+        path: "check-out",
+        element: <CheckOut />
+      }
     ],
   },
   {

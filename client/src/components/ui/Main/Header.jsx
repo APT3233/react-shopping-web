@@ -173,11 +173,11 @@ export default function Header() {
                   <li>
                     <NavLink
                       className={className}
-                      to="/profile"
+                      to="/sign-in"
                       style={{ textDecoration: "none", color: "inherit" }}
                       
                     >
-                      Profile
+                      Login
                     </NavLink>
                   </li>
                 </ul>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Box, Container, Grid, Typography, IconButton, Switch, Link, Tooltip, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
 import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 
 const StyledFooter = styled(Box)(({ theme, darkMode }) => ({
@@ -93,7 +93,7 @@ const Footer = () => {
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography variant="body2" sx={{ mr: 1 }}>
-                Dark Mode
+                Hack Mode
               </Typography>
               <Switch
                 checked={darkMode}
@@ -109,10 +109,10 @@ const Footer = () => {
               Quick Links
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              <FooterLink href="#" darkMode={darkMode}>Home</FooterLink>
-              <FooterLink href="#" darkMode={darkMode}>Services</FooterLink>
-              <FooterLink href="#" darkMode={darkMode}>Products</FooterLink>
-              <FooterLink href="#" darkMode={darkMode}>Contact</FooterLink>
+              <FooterLink href="/" darkMode={darkMode}>Home</FooterLink>
+              <FooterLink href="/product" darkMode={darkMode}>Product</FooterLink>
+              <FooterLink href="/cart" darkMode={darkMode}>Cart</FooterLink>
+              <FooterLink href="/contact" darkMode={darkMode}>Contact</FooterLink>
             </Box>
           </Grid>
 
@@ -122,41 +122,40 @@ const Footer = () => {
             </Typography>
             <ContactItem>
               <MdLocationOn style={{ marginRight: "8px" }} />
-              <Typography variant="body2">123 Business Street, NY 10001</Typography>
+              <Typography variant="body2">Sihanoukville, Campuchia</Typography>
             </ContactItem>
             <ContactItem>
               <MdPhone style={{ marginRight: "8px" }} />
-              <Typography variant="body2">+1 234 567 8900</Typography>
+              <Typography variant="body2">+84 86 2433 237</Typography>
             </ContactItem>
             <ContactItem>
               <MdEmail style={{ marginRight: "8px" }} />
-              <Typography variant="body2">contact@example.com</Typography>
+              <Typography variant="body2">anhnkde180030@thankyou.com</Typography>
             </ContactItem>
           </Grid>
-
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Follow Us
             </Typography>
             <Box>
               <Tooltip title="Facebook" arrow>
-                <SocialButton aria-label="facebook" darkMode={darkMode}>
+                <SocialButton aria-label="facebook" darkMode={darkMode} target="_blank" href="https://www.facebook.com">
                   <FaFacebook />
                 </SocialButton>
               </Tooltip>
               <Tooltip title="Twitter" arrow>
-                <SocialButton aria-label="twitter" darkMode={darkMode}>
+                <SocialButton aria-label="twitter" darkMode={darkMode} target="_blank" href="https://www.twitter.com">
                   <FaTwitter />
                 </SocialButton>
               </Tooltip>
               <Tooltip title="Instagram" arrow>
-                <SocialButton aria-label="instagram" darkMode={darkMode}>
+                <SocialButton aria-label="instagram" darkMode={darkMode} target="_blank" href="https://www.instagram.com">
                   <FaInstagram />
                 </SocialButton>
               </Tooltip>
-              <Tooltip title="LinkedIn" arrow>
-                <SocialButton aria-label="linkedin" darkMode={darkMode}>
-                  <FaLinkedin />
+              <Tooltip title="View Project Github" arrow>
+                <SocialButton aria-label="github" darkMode={darkMode} href="https://github.com/ahihi/chua_show_duoc" target="_blank">
+                  <FaGithub />
                 </SocialButton>
               </Tooltip>
             </Box>
@@ -165,7 +164,7 @@ const Footer = () => {
 
         <Box sx={{ mt: 4, pt: 2, borderTop: "1px solid", borderColor: darkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)" }}>
           <Typography variant="body2" align="center">
-            © {new Date().getFullYear()} Your Company Name. All rights reserved.
+            © {new Date().getFullYear()} Group of Hacker. All rights reserved.
           </Typography>
         </Box>
       </Container>
