@@ -51,7 +51,11 @@ const Navbar = () => {
                 key={text}
                 button
                 component={NavLink} 
-                to={text === "Home" ? "/" : `${text.toLowerCase()}`}
+                to={
+                  text === "Home" ? "/" :
+                  text === "Login" ? "/sign-in" :
+                  `/${text.toLowerCase()}`
+                }
                 style={{
                   textDecoration: "none",
                   color: "black",

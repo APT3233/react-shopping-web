@@ -3,7 +3,7 @@
 1. Install tomcat
 
 ```sh
-  https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.36/bin/apache-tomcat-10.1.36.tar.gz
+wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.36/bin/apache-tomcat-10.1.36.tar.gz
 ```
 
 2. Decompress file
@@ -61,7 +61,7 @@ After=network.target
 
 [Service]
 Type=forking
-Environment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+Environment=JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ExecStart=/opt/tomcat/bin/startup.sh
 ExecStop=/opt/tomcat/bin/shutdown.sh
 User=your-username

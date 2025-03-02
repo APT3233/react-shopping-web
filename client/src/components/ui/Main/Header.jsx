@@ -1,6 +1,6 @@
 import logo from "../../../assets/img/logo.png";
 import "../../../assets/css/header.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Select, Button, Row, Col } from "antd";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
@@ -14,6 +14,9 @@ export default function Header() {
   const [selectedItems, setSelectedItems] = useState([]);
   const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
   const [loadings, setLoadings] = useState([]);
+  const [isHidden, setIsHidden] = useState(false);
+  const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
+
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
@@ -32,9 +35,29 @@ export default function Header() {
   const className = (e) => {
     return e.isActive ? "navbar__link--active" : "navbar__link";
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setIsHidden(currentScrollPos > 0);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [prevScrollPos]);
+
   return (
     <>
-      <div className="header">
+      <div
+        className="header"
+        style={{
+          zIndex: "1000",
+          padding: isHidden ? "0" : "0 0 40px 0",
+          boxShadow: isHidden ? "0px 4px 8px rgba(0, 0, 0, 0.1)" : "none",
+          transition: "transform 0.5s ease-in-out, padding 0.5s ease-in-out",
+        }}
+      >
         <div className="header-container">
           <div className="header-box">
             <Row
@@ -114,19 +137,24 @@ export default function Header() {
             <Row
               gutter={16}
               style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                margin: "10px 0",
+                transition:
+                  "transform 0.5s ease-in-out, opacity 0.5s ease-in-out",
+                fontFamily: "'Public Sans'",
+                fontStyle: "normal",
+                fontWeight: "500",
               }}
             >
-              <div className="header-nav header-nav-container">
+              <div
+                className={`header-nav header-nav-container ${
+                  isHidden ? "header-nav-hidden" : ""
+                }`}
+              >
                 <ul
                   style={{
                     display: "flex",
-                    gap: "30px",
+                    gap: "40px",
                     listStyleType: "none",
-                    fontSize: "17px",
-                    color: "rgb(31, 41, 55)",
+                    fontSize: "20px",
                     cursor: "pointer",
                   }}
                 >
@@ -134,8 +162,7 @@ export default function Header() {
                     <NavLink
                       className={className}
                       to="/"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                      
+                      style={{ textDecoration: "none", color: "#2B3445" }}
                     >
                       Home
                     </NavLink>
@@ -144,8 +171,7 @@ export default function Header() {
                     <NavLink
                       className={className}
                       to="/product"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                      
+                      style={{ textDecoration: "none", color: "#2B3445" }}
                     >
                       Product
                     </NavLink>
@@ -154,8 +180,7 @@ export default function Header() {
                     <NavLink
                       className={className}
                       to="/cart"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                      
+                      style={{ textDecoration: "none", color: "#2B3445" }}
                     >
                       Cart
                     </NavLink>
@@ -164,8 +189,7 @@ export default function Header() {
                     <NavLink
                       className={className}
                       to="/contact"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                      
+                      style={{ textDecoration: "none", color: "#2B3445" }}
                     >
                       Contact
                     </NavLink>
@@ -174,8 +198,7 @@ export default function Header() {
                     <NavLink
                       className={className}
                       to="/sign-in"
-                      style={{ textDecoration: "none", color: "inherit" }}
-                      
+                      style={{ textDecoration: "none", color: "#2B3445" }}
                     >
                       Login
                     </NavLink>

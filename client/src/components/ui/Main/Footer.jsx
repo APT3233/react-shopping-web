@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Box, Container, Grid, Typography, IconButton, Switch, Link, Tooltip, useTheme } from "@mui/material";
+import { Box, Container, Grid, Typography, IconButton, Switch, Tooltip, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
 import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
 import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
+import { NavLink } from "react-router-dom";
 
 const StyledFooter = styled(Box)(({ theme, darkMode }) => ({
   background: darkMode
-    ? "linear-gradient(45deg, #1a237e 30%, #311b92 90%)"
+    ? "rgb(34, 41, 53)"
     : "linear-gradient(45deg, #f5f5f5 30%, #e0e0e0 90%)",
   padding: theme.spacing(6, 0),
   color: darkMode ? "#fff" : "#333",
@@ -39,7 +40,7 @@ const SocialButton = styled(IconButton)(({ theme, darkMode }) => ({
   }
 }));
 
-const FooterLink = styled(Link)(({ theme, darkMode }) => ({
+const FooterLink = styled(NavLink)(({ theme, darkMode }) => ({
   color: darkMode ? "#fff" : "#333",
   textDecoration: "none",
   transition: "color 0.2s ease",
@@ -109,10 +110,10 @@ const Footer = () => {
               Quick Links
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              <FooterLink href="/" darkMode={darkMode}>Home</FooterLink>
-              <FooterLink href="/product" darkMode={darkMode}>Product</FooterLink>
-              <FooterLink href="/cart" darkMode={darkMode}>Cart</FooterLink>
-              <FooterLink href="/contact" darkMode={darkMode}>Contact</FooterLink>
+              <FooterLink to="/" darkMode={darkMode}>Home</FooterLink>
+              <FooterLink to="/product" darkMode={darkMode}>Product</FooterLink>
+              <FooterLink to="/cart" darkMode={darkMode}>Cart</FooterLink>
+              <FooterLink to="/contact" darkMode={darkMode}>Contact</FooterLink>
             </Box>
           </Grid>
 

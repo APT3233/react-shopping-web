@@ -8,6 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
+import { NavLink } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
@@ -160,13 +161,13 @@ export default function SignInCard() {
         <Typography sx={{ textAlign: 'center' }}>
           Don&apos;t have an account?{' '}
           <span>
-            <Link
-              href="/sign-up"
+            <NavLink
+              to="/sign-up"
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
               Sign up
-            </Link>
+            </NavLink>
           </span>
         </Typography>
       </Box>
