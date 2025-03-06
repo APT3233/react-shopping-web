@@ -37,13 +37,28 @@ sudo chmod +x /opt/tomcat/bin/*.sh
   </dependency>
 </dependencies>
 ```
-6. Build 
+
+6. Build
+
 ```sh
 mvn clean package
 cp target/my-api-app.war /opt/tomcat/webapps/
 sudo systemctl restart tomcat
 ```
 
+7. TLS
+
+```xml
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+                maxThreads="150" SSLEnabled="true"
+                maxParameterCount="1000"
+                keystoreFile="/opt/tomcat/keystore.p12"
+                keystorePass="APT3233"
+                keystoreType="PKCS12"
+                clientAuth="false" sslProtocol="TLSv1.2">
+                <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        </Connector>
+```
 
 ### Other config
 
@@ -100,7 +115,9 @@ sudo nano /opt/tomcat/conf/server.xml
 connectionTimeout="20000"
 redirectPort="8443" />
 ```
+
 - Restart tomcat
+
 ```sh
 sudo systemctl restart tomcat
 ```

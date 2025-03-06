@@ -13,6 +13,7 @@ server/target
 dist
 dist-ssr
 *.local
+nginx.conf
 
 # Editor directories and files
 .vscode/*

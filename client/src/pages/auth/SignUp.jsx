@@ -7,11 +7,11 @@ import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
+import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../../components/ui/shared-theme/AppTheme';
 import ColorModeSelect from '../../components/ui/shared-theme/ColorModeSelect';
@@ -217,13 +217,13 @@ export default function SignUp(props) {
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
               Already have an account?{' '}
-              <Link
-                href="/sign-in"
+              <NavLink
+                to="/sign-in"
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
               >
                 Sign in
-              </Link>
+              </NavLink>
             </Typography>
           </Box>
         </Card>

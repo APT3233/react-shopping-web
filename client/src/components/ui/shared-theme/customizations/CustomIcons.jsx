@@ -118,3 +118,19 @@ export function GoogleIcon() {
     </SvgIcon>
   );
 }
+
+ 
+export function LogoIcon() {
+  <svg class="max-w-xs mb-6" viewBox="-1 0 257 50" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient x1="-0.500229" y1="24.291504" x2="384.499878" y2="24.291504" id="paint_linear_760_1075_0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"></stop>
+      <stop offset="1.000000" stop-color="#000000"></stop>
+    </linearGradient>
+  </defs>
+  <text x="10" y="40" font-family="Arial" font-size="40" fill="url(#paint_linear_760_1075_0)">
+    sixMemShop
+  </text>
+</svg>
+
+}
