@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="http://apt3233.id.vn"><img src="img/logo.png" alt="Markdownify" width="200"></a>
+  <a href="http://apt3233.id.vn"><img src="doc/img/logo.png" alt="Markdownify" width="200"></a>
   <br>
   Name Team
   <br>
