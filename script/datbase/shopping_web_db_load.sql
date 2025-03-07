@@ -13,7 +13,7 @@ INSERT INTO `user_profile` (`user_id`, `name`, `phone`, `dob`) VALUES
 (2, 'Nguyễn Văn Nam', '0902345678', '1990-02-02'),
 (3, 'Tống Thị Như Quỳnh', '0903456789', '1995-03-03');
 
--- Table `category`
+-- Table `category` 
 INSERT INTO `category` (`name`, `description`) VALUES
 ('Electronics', 'Electronic gadgets and devices'),
 ('Clothing', 'Men and Women Clothing'),

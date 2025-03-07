@@ -7,7 +7,7 @@ export default function Contact() {
   useEffect(() => {
     const fetchTest = async () => {
       instance
-        .get("/app/test", {
+        .get("/api/test", {
           withCredentials: false,
         })
         .then((response) => {
@@ -19,5 +19,5 @@ export default function Contact() {
     fetchTest();
   }, []);
 
-  return <>Contact Page -3 {data}</>;
+  return <>Contact Page -3--- {data}</>;
 }

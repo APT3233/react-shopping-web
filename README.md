@@ -2,12 +2,11 @@
   <br>
   <a href="http://apt3233.id.vn"><img src="doc/img/logo.png" alt="Markdownify" width="200"></a>
   <br>
-  Name Team
+  sixMemShop
   <br>
 </h1>
 
 <h4 align="center">Shopping Online</h4>
-
 
 <p align="center">
 <a href="#language-and-tool">Key Language & Tool</a> •
@@ -17,10 +16,11 @@
 </p>
 
 ## Language and Tool
-* FrontEnd
+
+- FrontEnd
   - ReactJs (vite)
   - antdesign, material UI (UI)
-* BackEnd
+- BackEnd
   - Java Spring boot v3.4.3
-    + JDK 21
-    + Maven 
+    - JDK 21
+    - Maven
