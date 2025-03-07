@@ -1,4 +1,4 @@
-package com.apt.dao;
+package com.apt.dao.Interface;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

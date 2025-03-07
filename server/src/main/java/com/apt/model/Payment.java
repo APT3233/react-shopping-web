@@ -1,4 +1,4 @@
-package com.apt.models;
+package com.apt.model;
 
 import java.time.LocalDate;
 

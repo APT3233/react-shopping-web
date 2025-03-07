@@ -59,7 +59,7 @@ const MarqueeAnimation = ({ title, desc }) => {
         </Typography>
       </Grid>
       <Grid item xs={12} lg={8}>
-        <StyledMarquee gradient={false} speed={80} direction="left">
+        <StyledMarquee gradient={false} speed={10000} direction="left">
           {desc.map((line, index) => (
             <div
               key={index}

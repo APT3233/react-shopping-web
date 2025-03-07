@@ -74,7 +74,7 @@ const NavigationButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const CardList = ({ title, data }) => {
+const CardList = ({ title, data, sliderClassName }) => {
   const products = data || [];
 
   const settings = {
@@ -122,14 +122,15 @@ const CardList = ({ title, data }) => {
     <>
       <CardTitle title={title} />
       <Container maxWidth="xl" sx={{ position: "relative", py: 6 }}>
-        <Slider {...settings} className="product-slider">
-          {products.map((product) => (
-            <div key={product.id} style={{ margin: "0 10px" }}>
+        {/* Add the unique slider class */}
+        <Slider {...settings} className={sliderClassName}>
+          {products.map((product, index) => (
+            <div key={index} style={{ margin: "0 10px" }}>
               <StyledCard tabIndex={0} aria-label={`Product: ${product.name}`}>
                 <StyledCardMedia
                   component="img"
                   height="250"
-                  image={product.image}
+                  image={product.imgLink}
                   alt={product.name}
                   loading="lazy"
                   onError={(e) => {
@@ -211,14 +212,14 @@ const CardList = ({ title, data }) => {
         </Slider>
         {/* Navigation Buttons */}
         <NavigationButton
-          onClick={() => document.querySelector(".slick-prev").click()}
+          onClick={() => document.querySelector(`.${sliderClassName} .slick-prev`).click()}
           aria-label="Previous"
           sx={{ left: -50 }}
         >
           &#10094;
         </NavigationButton>
         <NavigationButton
-          onClick={() => document.querySelector(".slick-next").click()}
+          onClick={() => document.querySelector(`.${sliderClassName} .slick-next`).click()}
           aria-label="Next"
           sx={{ right: -50 }}
         >
@@ -229,13 +230,14 @@ const CardList = ({ title, data }) => {
   );
 };
 
+
 CardList.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       price: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
+      imgLink: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
       rating: PropTypes.string.isRequired,
       reviews: PropTypes.string.isRequired,

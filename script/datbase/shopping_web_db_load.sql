@@ -15,14 +15,29 @@ INSERT INTO `user_profile` (`user_id`, `name`, `phone`, `dob`) VALUES
 
 -- Table `category` 
 INSERT INTO `category` (`name`, `description`) VALUES
-('Electronics', 'Electronic gadgets and devices'),
+('Accessory', 'Accessory'),
 ('Clothing', 'Men and Women Clothing'),
 ('Car', 'Super Car');
 
 -- Table `product`
 INSERT INTO `product` (`category_id`, `name`, `price`, `quantity`, `discount`, `rating`, `reviews`, `description`, `img_link`)
 VALUES 
-(),
+(1, 'Corset', 500, 5, 0, 4.8, 15, 'A stylish corset designed to enhance your silhouette. Perfect for formal occasions or adding a dramatic flair to your outfit.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Corset.png'),
+(1, 'Corset 2', 1200, 5, 0, 4.8, 15, 'A second version of the corset, with a more refined design and a perfect fit for all occasions.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Corset_2.png'),
+(1, 'Glasses', 200, 5, 5, 4.8, 15, 'A pair of stylish glasses that add a touch of elegance to your look. Available now with a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Glasses.png'),
+(1, 'Glasses 2', 100, 5, 0, 4.8, 15, 'A second pair of glasses, designed for everyday wear. A stylish accessory for any outfit.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Glasses_2.png'),
+(1, 'Hat', 600, 5, 5, 4.8, 15, 'A classic hat, perfect for sun protection and adding a sophisticated touch to your style. Available with a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Hat.png'),
+(1, 'Hat 2', 500, 5, 0, 4.8, 15, 'A second stylish hat, designed to complement any casual or formal look.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Hat_2.png'),
+(1, 'Towel', 200, 5, 5, 4.8, 15, 'A soft towel for everyday use, offering comfort and absorbency. Available with a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Towel.png'),
+(1, 'Towel 2', 400, 5, 5, 4.8, 15, 'A second towel designed for a more luxurious experience, with extra softness and absorbency. Available with a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/PhuKien/PK_Towel_2.png'),
+(2, 'Hoodie', 1500, 5, 0, 4.8, 15, 'A comfortable hoodie made with soft fabric, perfect for casual wear or staying warm during cold weather.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_Hoodie.png'),
+(2, 'Polo White', 1200, 5, 0, 4.8, 15, 'A classic white polo shirt made of breathable material, ideal for both casual and semi-formal occasions.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_Polo_2.png'),
+(2, 'Polo White', 900, 5, 5, 4.8, 15, 'A stylish white polo shirt with a comfortable fit, perfect for a smart-casual look. Now available with a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_Somi.png'),
+(2, 'Trousers', 1900, 5, 0, 4.8, 15, 'A pair of elegant trousers with a tailored fit, made from high-quality fabric for a professional look.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_Trousers.png'),
+(2, 'Cow Shirt', 900, 5, 5, 4.8, 15, 'A quirky cow print shirt, perfect for a fun and bold look. Available at a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_cowShirt.png'),
+(2, 'Sweater', 1500, 5, 0, 4.8, 15, 'A cozy sweater made with soft fabric, ideal for layering on cooler days or relaxing at home.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_sweater.png'),
+(2, 'Trousers 2', 900, 5, 5, 4.8, 15, 'A second pair of stylish trousers, perfect for a modern and professional look. Get a 5% discount on this item.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_trousers_2.png'),
+(2, 'Polo 2', 900, 5, 5, 4.8, 15, 'Another variant of the classic polo, offering a comfortable fit and great style. Available at a 5% discount.', 'https://raw.githubusercontent.com/APT3233/my_journey/main/data/Clothes/Clothes_polo.png'),
 (3, 'Ferrari LaFerrari', 1500000, 5, 0, 4.8, 15, 'The Ferrari LaFerrari is the first hybrid supercar from Ferrari, combining a V12 engine with an electric motor to deliver a total of 950 horsepower. It features an aerodynamically optimized design and luxurious interior.', 'https://w0.peakpx.com/wallpaper/45/305/HD-wallpaper-black-2017-spider-laferrari-ferrari-new-items.jpg'),
 (3, 'Lamborghini Huracan', 1200000, 8, 5, 4.7, 20, 'The Lamborghini Huracan is a sports car with a V10 engine producing 640 horsepower. It boasts Lamborghini’s signature sharp lines and impressive performance.', 'https://www.turbo.fr/sites/default/files/styles/slideshow_images/public/slideshow/slides/2020-08/5f29653681b9a.jpg?itok=YVmQyLqQ'),
 (3, 'Porsche 911 Turbo', 900000, 10, 0, 4.6, 18, 'The Porsche 911 Turbo is an icon in the sports car world, with a turbocharged 6-cylinder engine producing 580 horsepower. It combines classic design with modern technology.', 'https://w0.peakpx.com/wallpaper/587/577/HD-wallpaper-porsche-911-turbo-s-cabriolet-2020-2.jpg'),

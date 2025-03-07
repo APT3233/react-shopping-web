@@ -5,7 +5,7 @@ const Product = () => {
   const productsData = [
     {
       id: 1,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
+      imgLink: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
       category: 'Electronics',
       name: 'Premium Headphones',
       rating: '4.5',
@@ -14,7 +14,7 @@ const Product = () => {
     },
     {
       id: 2,
-      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
+      imgLink: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
       category: 'Wearables',
       name: 'Smart Watch',
       rating: '4.0',
@@ -23,7 +23,7 @@ const Product = () => {
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
+      imgLink: 'https://imglinks.unsplash.com/photo-1608043152269-423dbba4e7e1',
       category: 'Electronics',
       name: 'Wireless Speaker',
       rating: '4.8',
@@ -32,7 +32,7 @@ const Product = () => {
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
+      imglink: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
       category: 'Electronics',
       name: 'Wireless Speaker',
       rating: '4.8',
@@ -41,17 +41,17 @@ const Product = () => {
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
+      imgLink: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
       category: 'Electronics',
       name: 'Wireless Speaker',
       rating: '4.8',
       reviews: '20',
       price: '149.99',
-    },
+    }
     ,
     {
       id: 2,
-      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
+      imgLink: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
       category: 'Wearables',
       name: 'Smart Watch',
       rating: '4.0',
@@ -60,7 +60,7 @@ const Product = () => {
     },
     {
       id: 3,
-      image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
+      imgLink: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
       category: 'Electronics',
       name: 'Wireless Speaker',
       rating: '4.8',
@@ -71,7 +71,7 @@ const Product = () => {
 
   return (
     <div>
-      <CardList title="Top Electronics Deal" data={productsData} />
+      <CardList title="Top Electronics Deal" data={productsData} sliderClassName="slider1"/>
     </div>
   );
 };
