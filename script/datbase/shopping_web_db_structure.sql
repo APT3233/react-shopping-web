@@ -59,6 +59,8 @@ CREATE TABLE `product` (
   `price` DECIMAL(10, 2) NOT NULL,
   `quantity` INT NOT NULL,
   `discount` DECIMAL(5, 2) DEFAULT 0,
+  `rating` FLOAT,
+  `reviews` FLOAT,
   `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `img_link` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`product_id`),

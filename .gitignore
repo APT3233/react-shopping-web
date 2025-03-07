@@ -14,7 +14,7 @@ dist
 dist-ssr
 *.local
 nginx.conf
-server/src/main/resources/db.properties
+
 
 # Editor directories and files
 .vscode/*

@@ -8,19 +8,19 @@ const Cart = () => {
   useEffect(() => {
     const fetchTest = async () => {
       instance
-        .get("/api/db", {
+        .get("/api/user", {
           withCredentials: false,
         })
         .then((response) => {
           console.log("data: ", response.data);
-          setData(response.data.message);
+          setData(response.data);
         })
         .catch((err) => console.error(err));
     };
     fetchTest();
   }, []);
 
-  return <>Data --- {data}</>;
+  return <>Data --- </>;
 }
 
 
