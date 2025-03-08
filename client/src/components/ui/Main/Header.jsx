@@ -71,7 +71,7 @@ export default function Header() {
               <Col xs={24} sm={4} lg={6}>
                 <div className="header-logo">
                   <Navbar />
-                  <NavLink to="/" className={className}>
+                  <NavLink to="/" className={className} style={{}}>
                     <img
                       src={logo}
                       alt="logo-team"

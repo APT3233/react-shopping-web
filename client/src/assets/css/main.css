@@ -79,16 +79,17 @@
 
 @media (max-width: 600px) {
   .banner-content-title{
-    top: 20px;
+    top: 40px;
     left: 20px;
     font-size: 0.75rem;
   }
   .banner-content-type{
-    top: 30px;
+    top: 60px;
     left: 20px;
+    font-size: 1.2rem;
   }
   .banner-content-sale{
-    top: 80px;
+    top: 90px;
     left: 20px;
     font-size: 0.7rem;
   }
@@ -96,12 +97,12 @@
     font-size: 0.9rem;
   }
   .banner-content-des{
-    top: 100px;
+    top: 110px;
     left: 20px;
     font-size: 0.5rem;
   }
   .banner-content-btn{
-    top: 120px;
+    top: 130px;
     left: 20px;
   }
   .banner-content-btn Button{
@@ -176,7 +177,8 @@
 /* End Banner-content */
 
 .banner-main__img {
-  width: 1250px;
+  /* width: 1250px; */
+  width: 100%;
   height: 500px;
   object-fit: cover;
   border-radius: 20px;  
@@ -198,7 +200,7 @@
 @media (max-width: 600px) {
   .banner-main__img{
     width: 100%;
-    height: auto;
+    height: 200px;
   }
   .banner-right{
     flex-direction: row;

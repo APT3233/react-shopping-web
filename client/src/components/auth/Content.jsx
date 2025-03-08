@@ -7,41 +7,46 @@ import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import { SitemarkIcon } from './CustomIcons';
+import logo from "../../assets/img/logo.png"
+import { useNavigate } from 'react-router-dom';
 
 const items = [
   {
     icon: <SettingsSuggestRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Adaptable performance',
+    title: 'Ultimate Performance',
     description:
-      'Our product effortlessly adjusts to your needs, boosting efficiency and simplifying your tasks.',
+      'Our products deliver exceptional performance, seamlessly adapting to your needs and elevating your experience.',
   },
   {
     icon: <ConstructionRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Built to last',
+    title: 'Timeless Durability',
     description:
-      'Experience unmatched durability that goes above and beyond with lasting investment.',
+      'Unparalleled craftsmanship ensures lasting durability, making every purchase a worthwhile investment in luxury.',
   },
   {
     icon: <ThumbUpAltRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Great user experience',
+    title: 'Sophisticated Experience',
     description:
-      'Integrate our product into your routine with an intuitive and easy-to-use interface.',
+      'Enjoy an intuitive, seamless interface wrapped in elegant design, crafted for discerning individuals.',
   },
   {
     icon: <AutoFixHighRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Innovative functionality',
+    title: 'Pioneering Innovation',
     description:
-      'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
+      'Stay ahead of the curve with cutting-edge features designed to redefine excellence and exclusivity.',
   },
 ];
 
+
 export default function Content() {
+  const navigate = useNavigate()
   return (
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
     >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <SitemarkIcon />
+        {/* <SitemarkIcon /> */}
+        <img src={logo} alt='logo' style={{width: "90px", cursor: "pointer"}} onClick={()=>navigate('/')}/>
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>

@@ -11,11 +11,13 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../../components/ui/shared-theme/AppTheme';
 import ColorModeSelect from '../../components/ui/shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../../components/ui/shared-theme/customizations/CustomIcons'
+import { GoogleIcon, FacebookIcon } from '../../components/ui/shared-theme/customizations/CustomIcons'
+import logo from "../../assets/img/logo.png"
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +68,7 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
+  const navigate = useNavigate()
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -124,7 +127,8 @@ export default function SignUp(props) {
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <SitemarkIcon />
+          {/* <SitemarkIcon /> */}
+          <img src={logo} alt='logo' style={{width: "50px", cursor: "pointer"}} onClick={()=>navigate('/')} />
           <Typography
             component="h1"
             variant="h4"

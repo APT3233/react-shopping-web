@@ -9,7 +9,7 @@ import {
   Container,
 } from "@mui/material";
 import { Star, StarBorder } from "@mui/icons-material";
-import { margin, padding, styled } from "@mui/system";
+import { styled } from "@mui/system";
 import { FaShoppingCart } from "react-icons/fa";
 import PropTypes from "prop-types";
 import Slider from "react-slick";

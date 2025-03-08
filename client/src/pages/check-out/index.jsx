@@ -1,11 +1,14 @@
+import Checkout from "./CheckOut";
 
-
-const CheckOut = () => {
+export default function CheckOut() {
   return (
-    <>
-    Check Out</>
-  )
+    <div
+      style={{
+        maxWidth: window.innerWidth >= 1024 ? "70%" : "100%", // Apply 80% width only for large screens
+        margin: "0 auto",
+      }}
+    >
+      <Checkout />
+    </div>
+  );
 }
-
-
-export default CheckOut;

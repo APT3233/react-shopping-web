@@ -56,7 +56,6 @@ const Home = () => {
       <MarqueeAnimation title={title} desc={desc} /> {/* Scroll Notification */}
       
       <CardList title="Clothing" data={data.clothing} sliderClassName="slider2" />
-
       <MarqueeAnimation title={title} desc={desc} /> {/* Scroll Notification */}
 
       <CardList

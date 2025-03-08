@@ -1,78 +1,71 @@
-import CardList from "../../components/Card/CardList"
+import CardList from "../../components/Card/CardList";
+import MarqueeAnimation from "../../components/ui/Marquee";
+import instance from "../../utils/customizeAxios";
+import { useState, useEffect } from "react";
 
-// Parent Component
+const title = "Nam Said ";
+const desc = [
+  "Nạp tiền vào donate cho tao",
+  "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
+  "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
+  "Đời không sóng gió đời vô vị",
+  "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
+  "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
+  "Yêu làm cái gì cho rách việc",
+  "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
+  "&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
+];
+
 const Product = () => {
-  const productsData = [
-    {
-      id: 1,
-      imgLink: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
-      category: 'Electronics',
-      name: 'Premium Headphones',
-      rating: '4.5',
-      reviews: '10',
-      price: '299.99',
-    },
-    {
-      id: 2,
-      imgLink: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
-      category: 'Wearables',
-      name: 'Smart Watch',
-      rating: '4.0',
-      reviews: '15',
-      price: '199.99',
-    },
-    {
-      id: 3,
-      imgLink: 'https://imglinks.unsplash.com/photo-1608043152269-423dbba4e7e1',
-      category: 'Electronics',
-      name: 'Wireless Speaker',
-      rating: '4.8',
-      reviews: '20',
-      price: '149.99',
-    },
-    {
-      id: 3,
-      imglink: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
-      category: 'Electronics',
-      name: 'Wireless Speaker',
-      rating: '4.8',
-      reviews: '20',
-      price: '149.99',
-    },
-    {
-      id: 3,
-      imgLink: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
-      category: 'Electronics',
-      name: 'Wireless Speaker',
-      rating: '4.8',
-      reviews: '20',
-      price: '149.99',
-    }
-    ,
-    {
-      id: 2,
-      imgLink: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30',
-      category: 'Wearables',
-      name: 'Smart Watch',
-      rating: '4.0',
-      reviews: '15',
-      price: '199.99',
-    },
-    {
-      id: 3,
-      imgLink: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1',
-      category: 'Electronics',
-      name: 'Wireless Speaker',
-      rating: '4.8',
-      reviews: '20',
-      price: '149.99',
-    },
-  ];
+  const [data, setData] = useState({
+    car: [],
+    clothing: [],
+    accessory: [],
+  });
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = instance.get("/api/products", {
+        withCredentials: false,
+      });
+
+      const data = (await response).data;
+      const car = data.filter((data) => data.categoryId === 3);
+      const clothing = data.filter((data) => data.categoryId === 2);
+      const accessory = data.filter((data) => data.categoryId === 1);
+
+      setData({
+        car,
+        clothing,
+        accessory,
+      });
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
-    <div>
-      <CardList title="Top Electronics Deal" data={productsData} sliderClassName="slider1"/>
-    </div>
+    <>
+      <CardList
+        title="Top Super Car Deal"
+        data={data.car}
+        sliderClassName="slider1"
+      />
+      <MarqueeAnimation title={title} desc={desc} /> {/* Scroll Notification */}
+
+      <CardList
+        title="Clothing"
+        data={data.clothing}
+        sliderClassName="slider2"
+      />
+      <MarqueeAnimation title={title} desc={desc} /> {/* Scroll Notification */}
+
+      <CardList
+        title="Accessory"
+        data={data.accessory}
+        sliderClassName="slider3"
+      />
+    </>
   );
 };
 
