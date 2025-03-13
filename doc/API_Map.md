@@ -10,14 +10,26 @@ Các endpoint này dùng để kiểm tra hoạt động của API và kết n�
 
 ---
 
+## Auth Endpoints
+Các endpoint liên quan đến xác thực người dùng.
+
+| Endpoint                   | Method | Description                           |
+|----------------------------|--------|---------------------------------------|
+| `/api/auth/sign-in`        | POST   | Đăng nhập người dùng                 |
+| `/api/auth/sign-up`        | POST   | Đăng ký tài khoản mới                |
+| `/api/auth/callback`       | GET    | Callback cho login bằng Google       |
+| `/api/auth/forgotpassword` | POST   | Quên mật khẩu và yêu cầu đặt lại mật khẩu |
+
+
 ## Product Endpoints
 Các endpoint liên quan đến sản phẩm và danh mục, cung cấp chức năng quản lý và truy xuất dữ liệu sản phẩm.
 
-| Endpoint         | Method | Description                        |
-|------------------|--------|------------------------------------|
-| `/api/products`  | GET    | Lấy danh sách tất cả sản phẩm      |
+| Endpoint            | Method | Description                        |
+|---------------------|--------|------------------------------------|
+| `/api/products`     | GET    | Lấy danh sách tất cả sản phẩm      |
 | `/api/product/{id}` | GET    | Lấy thông tin chi tiết của sản phẩm theo ID |
-| `/api/categories`| GET    | Lấy danh sách tất cả danh mục      |
+| `/api/categories`   | GET    | Lấy danh sách tất cả danh mục      |
+
 
 ---
 

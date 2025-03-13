@@ -10,21 +10,39 @@ import java.util.Properties;
 
 public class DataBaseConnector {
     private static HikariDataSource dataSource;
+    private static String SECRET_KEY;
 
     static {
         try {
             Properties properties = new Properties();
-            try (InputStream input = DataBaseConnector.class.getClassLoader().getResourceAsStream("db.properties")) {
+            try (InputStream input = DataBaseConnector.class.getClassLoader().getResourceAsStream("application.properties")) {
                 if (input == null) {
-                    throw new RuntimeException("Không tìm thấy file db.properties trong classpath.");
+                    throw new RuntimeException("Không tìm thấy file application.properties trong classpath.");
                 }
                 properties.load(input);
             }
 
+            SECRET_KEY = properties.getProperty("SECRET_KEY");
+            if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
+                throw new RuntimeException("SECRET_KEY không được cấu hình trong application.properties!");
+            }
+
+            // set thuộc tính thủ công
+            HikariConfig config = new HikariConfig();
+            config.setDriverClassName(properties.getProperty("driverClassName"));
+            config.setJdbcUrl(properties.getProperty("jdbcUrl"));
+            config.setUsername(properties.getProperty("username"));
+            config.setPassword(properties.getProperty("password"));
+            config.setMaximumPoolSize(Integer.parseInt(properties.getProperty("maximumPoolSize", "10")));
+            config.setMinimumIdle(Integer.parseInt(properties.getProperty("minimumIdle", "5")));
+            config.setIdleTimeout(Long.parseLong(properties.getProperty("idleTimeout", "30000")));
+            config.setConnectionTimeout(Long.parseLong(properties.getProperty("connectionTimeout", "30000")));
+            config.setValidationTimeout(Long.parseLong(properties.getProperty("validationTimeout", "5000")));
+            config.setLeakDetectionThreshold(Long.parseLong(properties.getProperty("leakDetectionThreshold", "2000")));
+
             Class.forName(properties.getProperty("driverClassName"));
             System.out.println("✅ JDBC Driver loaded!");
 
-            HikariConfig config = new HikariConfig(properties);
             dataSource = new HikariDataSource(config);
             System.out.println("✅ HikariDataSource khởi tạo thành công!");
 
@@ -41,10 +59,14 @@ public class DataBaseConnector {
         return dataSource.getConnection();
     }
 
+    public static String getSecretKey() {
+        return SECRET_KEY;
+    }
+
     public static void close() {
-        if (dataSource != null) {
+        if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
-            System.out.println("✅ Đã đóng kết nối!");
+            System.out.println("✅ Đã đóng HikariDataSource!");
         }
     }
 }
