@@ -50,10 +50,8 @@ public class Authentication extends HttpServlet {
         String email;
         String password;
 
-        // Kiểm tra Content-Type để xác định cách lấy dữ liệu
         String contentType = request.getContentType();
         if (contentType != null && contentType.contains("application/json")) {
-            // Nhận dữ liệu từ JSON body
             ObjectMapper mapper = new ObjectMapper();
             try {
                 StringBuilder sb = new StringBuilder();
@@ -83,7 +81,7 @@ public class Authentication extends HttpServlet {
         }
 
         int role = authService.signIn(email, password);
-
+        System.out.println("Role: " + role);
         if (role != -1) {
             String accessToken = generateAccessToken(email, role);
             HttpSession session = request.getSession();

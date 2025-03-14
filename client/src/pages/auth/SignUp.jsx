@@ -20,7 +20,9 @@ import {
   FacebookIcon,
 } from "../../components/ui/shared-theme/customizations/CustomIcons";
 import logo from "../../assets/img/logo.png";
-import instance from "../../utils/customizeAxios"
+import { setCookie } from "../../utils/security";
+import { signUp } from "../../services/Auth";
+import { ALERT } from "../../utils/Alert";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -110,23 +112,31 @@ export default function SignUp(props) {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (nameError || emailError || passwordError) {
       event.preventDefault();
       return;
     }
-    event.preventDefault()
-    const data = new FormData(event.currentTarget);
+    event.preventDefault();
+    try {
+      const data = new FormData(event.currentTarget);
 
-    const name = data.get("name");
-    const email = data.get("email");
-    const password = data.get("password");
-    
-    const response = instance.post('/api/auth/sign-up', {
-      name, email, password
-    })
-    console.log(response)
+      const name = data.get("name");
+      const email = data.get("email");
+      const password = data.get("password");
 
+      const response = await signUp(name, email, password);
+      setCookie("access_token", response?.access_token, 10);
+      if (response.success) {
+        ALERT("SignUp Successfully", "Welcome our shop", "success", () => {
+          navigate("/");
+        });
+      } else {
+        ALERT("Failed", response.error, 'error');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -6,6 +6,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import Navbar from "./Navbar";
 import { NavLink } from "react-router-dom";
+import { clearCookie, getCookie } from "../../../utils/security";
 
 // Fetch API call /api/categories
 const OPTIONS = ["Clothes", "Electronic", "Bananas", "Helicopters"];
@@ -17,6 +18,11 @@ export default function Header() {
   const [isHidden, setIsHidden] = useState(false);
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
 
+  const isLoggedIn = getCookie("access_token");
+  const handleLogout = () => {
+    clearCookie();
+    window.location.href = "/sign-in";
+  };
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
@@ -195,13 +201,28 @@ export default function Header() {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink
-                      className={className}
-                      to="/sign-in"
-                      style={{ textDecoration: "none", color: "#2B3445" }}
-                    >
-                      Login
-                    </NavLink>
+                    {isLoggedIn ? (
+                      <NavLink
+                        onClick={handleLogout}
+                        style={{
+                          textDecoration: "none",
+                          color: "#2B3445",
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Logout
+                      </NavLink>
+                    ) : (
+                      <NavLink
+                        className={className}
+                        to="/sign-in"
+                        style={{ textDecoration: "none", color: "#2B3445" }}
+                      >
+                        Login
+                      </NavLink>
+                    )}
                   </li>
                 </ul>
               </div>

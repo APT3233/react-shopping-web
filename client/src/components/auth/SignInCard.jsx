@@ -13,10 +13,11 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
+import { GoogleIcon, FacebookIcon } from "./CustomIcons";
 import logo from "../../assets/img/logo.png";
-import instance from "../../utils/customizeAxios";
 import { signIn } from "../../services/Auth";
+import { setCookie } from "../../utils/security";
+import { ALERT } from "../../utils/Alert";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -39,6 +40,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 export default function SignInCard() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
+  const [password, setPassword] = React.useState('')
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -52,18 +54,35 @@ export default function SignInCard() {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     if (emailError || passwordError) {
       event.preventDefault();
       return;
     }
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get("email");
-    const password = data.get("password");
+    try {
+      const data = new FormData(event.currentTarget);
+      const email = data.get("email");
+      const passwd = data.get("password")
 
-    const response = signIn(email, password)
-    console.log(response)
+      const response = await signIn(email, passwd);
+      setCookie('access_token', response?.access_token, 10)
+      if(response.success){
+        ALERT('Successfully', 'Welcome back', 'success', () => {
+          navigate('/')
+        })
+      } else {
+        setPassword('')
+        setPasswordError(false)
+        setPasswordErrorMessage('')
+        ALERT('Login Failed', response.error, 'error')
+      }
+
+    } catch (error) {
+      if (error.response) {
+        console.error("Error:", error.response);
+      }
+    }
   };
 
   const validateInputs = () => {
@@ -160,6 +179,8 @@ export default function SignInCard() {
             fullWidth
             variant="outlined"
             color={passwordError ? "error" : "primary"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
         <FormControlLabel

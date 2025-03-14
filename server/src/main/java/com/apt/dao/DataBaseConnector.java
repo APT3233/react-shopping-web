@@ -27,10 +27,17 @@ public class DataBaseConnector {
                 throw new RuntimeException("SECRET_KEY không được cấu hình trong application.properties!");
             }
 
-            // set thuộc tính thủ công
+            // Set thuộc tính thủ công
             HikariConfig config = new HikariConfig();
             config.setDriverClassName(properties.getProperty("driverClassName"));
-            config.setJdbcUrl(properties.getProperty("jdbcUrl"));
+
+            // Thêm allowPublicKeyRetrieval=true vào JDBC URL
+            String jdbcUrl = properties.getProperty("jdbcUrl");
+            if (jdbcUrl != null && !jdbcUrl.contains("allowPublicKeyRetrieval=true")) {
+                jdbcUrl += (jdbcUrl.contains("?") ? "&" : "?") + "allowPublicKeyRetrieval=true";
+            }
+            config.setJdbcUrl(jdbcUrl);
+
             config.setUsername(properties.getProperty("username"));
             config.setPassword(properties.getProperty("password"));
             config.setMaximumPoolSize(Integer.parseInt(properties.getProperty("maximumPoolSize", "10")));
@@ -40,9 +47,11 @@ public class DataBaseConnector {
             config.setValidationTimeout(Long.parseLong(properties.getProperty("validationTimeout", "5000")));
             config.setLeakDetectionThreshold(Long.parseLong(properties.getProperty("leakDetectionThreshold", "2000")));
 
+            // Load driver
             Class.forName(properties.getProperty("driverClassName"));
             System.out.println("✅ JDBC Driver loaded!");
 
+            // Khởi tạo HikariDataSource
             dataSource = new HikariDataSource(config);
             System.out.println("✅ HikariDataSource khởi tạo thành công!");
 
