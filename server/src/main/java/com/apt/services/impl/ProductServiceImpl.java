@@ -4,6 +4,7 @@ import com.apt.dao.ProductDAO;
 import com.apt.model.Product;
 import com.apt.services.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
@@ -13,5 +14,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllProducts() {
         return productDAO.selectAll();
+    }
+
+    @Override
+    public ArrayList<Product> getProductsByCategories(String categoryName){
+        return productDAO.getProductsByCategories(categoryName);
     }
 }

@@ -20,6 +20,8 @@ import { styled as muiStyled } from "@mui/material/styles";
 import { FiMinus, FiPlus, FiHeart, FiShare2 } from "react-icons/fi";
 import { MdZoomIn } from "react-icons/md";
 import { useLocation } from "react-router-dom";
+import { getCookie } from "../../utils/security";
+import { CONFIRM } from "../../utils/Alert";
 
 const ProductImage = muiStyled(CardMedia)(({ theme }) => ({
   // height: 400,
@@ -31,7 +33,7 @@ const ProductImage = muiStyled(CardMedia)(({ theme }) => ({
     transform: "scale(1.05)",
     boxShadow: theme.shadows[4],
   },
-  userSelect: "none"
+  userSelect: "none",
 }));
 
 const CardDetail = () => {
@@ -48,9 +50,8 @@ const CardDetail = () => {
     reviews: 0,
     quantity: 0,
     description: "",
-    imgLink: "https://via.placeholder.com/400", 
+    imgLink: "https://via.placeholder.com/400",
   };
-
 
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity >= 1 && newQuantity <= product.quantity) {
@@ -62,8 +63,15 @@ const CardDetail = () => {
   };
 
   const handleAddToCart = () => {
-    setSnackbarMessage("Product added to cart!");
-    setShowSnackbar(true);
+    const token = getCookie("access_token");
+    if (!token) {
+      CONFIRM("Login Required !", "Please login now", "warning", () => {
+        window.location.href = "/sign-in";
+      });
+    } else {
+      setSnackbarMessage("Product added to cart!");
+      setShowSnackbar(true);
+    }
   };
 
   const discountedPrice = product.price * (1 - product.discount / 100);
@@ -86,7 +94,7 @@ const CardDetail = () => {
           >
             <ProductImage
               component="img"
-              image={product.imgLink} 
+              image={product.imgLink}
               alt={product.name}
             />
             <Tooltip title="Click to zoom">
@@ -182,7 +190,7 @@ const CardDetail = () => {
                 transition: "all 0.3s",
                 "&:hover": { transform: "translateY(-2px)" },
               }}
-              style={{backgroundColor: "#202738",}}
+              style={{ backgroundColor: "#202738" }}
             >
               Add to Cart
             </Button>

@@ -1,4 +1,4 @@
-import CartCart from "../../components/Card/CardCart";
+import CardCart from "../../components/Card/CardCart";
 
 const data = [
   {
@@ -26,7 +26,7 @@ const data = [
 
 const Cart = () => {
 
-  return <><CartCart initialCartItems={data} /></>;
+  return <><CardCart initialCartItems={data} /></>;
 };
 
 export default Cart;

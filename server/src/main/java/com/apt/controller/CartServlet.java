@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 
+import com.apt.dao.DataBaseConnector;
 import com.apt.model.Order;
 import com.apt.services.CartService;
 import com.apt.services.impl.CartServiceImpl;
@@ -83,5 +84,17 @@ public class CartServlet extends HttpServlet {
             out.print(jsonResponse.toString());
             out.flush();
         }
+    }
+
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        DataBaseConnector.close();
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Cart Servlet";
     }
 }

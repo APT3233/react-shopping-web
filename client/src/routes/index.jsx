@@ -11,6 +11,7 @@ import Cart from "../pages/cart";
 import Contact from "../pages/contact";
 import CheckOut from "../pages/check-out";
 import ProductItem from "../pages/product/ProductItem";
+import Search from "../pages/search";
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
         path: "contact",
         element: <Contact />
       },
+      {
+        path: "search",
+        element: <Search />
+      }
+      ,
       {
         path: "check-out",
         element: <CheckOut />

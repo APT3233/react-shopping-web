@@ -18,7 +18,7 @@ import "slick-carousel/slick/slick-theme.css";
 import CardTitle from "./CardTitle";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/security";
-import { ALERT, CONFIRM } from "../../utils/Alert";
+import {  CONFIRM } from "../../utils/Alert";
 import { addToCart } from "../../services/CartService";
 
 // Styled components

@@ -40,6 +40,33 @@
   transform: translateY(-200%); 
   opacity: 0;
 }
+/* CSS  NavLink */
+.navbar__link {
+  position: relative;
+  text-decoration: none;
+  color: #2B3445;
+  padding-bottom: 5px; 
+}
+
+.navbar__link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0; 
+  height: 2px;
+  background-color: #202738;
+  transition: width 0.2s ease-in-out;
+}
+
+.navbar__link:hover::after {
+  width: 100%;
+}
+
+.navbar__link--active::after {
+  width: 100%;
+}
+
 
 @media (max-width: 600px) {
   .header{

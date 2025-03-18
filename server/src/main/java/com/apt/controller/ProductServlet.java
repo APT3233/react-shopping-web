@@ -21,9 +21,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/products")
 public class ProductServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private ProductService productService;
 
     public ProductServlet() {
         super();
+        this.productService = new ProductServiceImpl();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -31,26 +33,23 @@ public class ProductServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        ProductService productService = new ProductServiceImpl(); 
-        List<Product> products = null;
+        String categories = request.getParameter("categories");
 
-        try {
-            products = productService.getAllProducts();
+        try (PrintWriter out = response.getWriter()) {
+            ArrayList<Product> products = productService.getProductsByCategories(categories);
 
             Gson gson = new Gson();
             String json = gson.toJson(products);
-
-            try (PrintWriter out = response.getWriter()) {
-                out.print(json);
-                out.flush();
-            }
+            
+            response.setStatus(HttpServletResponse.SC_OK);
+            out.print(json);
+            out.flush();
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
             try (PrintWriter out = response.getWriter()) {
-                out.print("{\"error\": \"Unexpected error: " + e.getMessage() + "\"}");
+                out.print("{\"error\": \"Server error: " + e.getMessage() + "\"}");
                 out.flush();
             }
-            e.printStackTrace();
         }
     }
 

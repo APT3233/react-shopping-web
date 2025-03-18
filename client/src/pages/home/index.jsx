@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Banner from "../../components/ui/example/Banner";
 import Feauter_1 from "../../components/ui/example/Feauter_1";
 import MarqueeAnimation from "../../components/ui/Marquee";
-import instance from "../../utils/customizeAxios";
 import CardList from "../../components/Card/CardList";
+import { getAllProducts } from "../../services/Product";
 
 const titleCar = "Black Friday ";
 const descCar = [
@@ -40,20 +40,20 @@ const Home = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = instance.get("/api/products", {
-        withCredentials: false,
-      });
+      const response = await getAllProducts();
 
-      const data = (await response).data;
-      const car = data.filter((data) => data.categoryId === 3);
-      const clothing = data.filter((data) => data.categoryId === 2);
-      const accessory = data.filter((data) => data.categoryId === 1);
+      if (response.success) {
+        const data = response.data;
+        const car = data.filter((data) => data.categoryId === 3);
+        const clothing = data.filter((data) => data.categoryId === 2);
+        const accessory = data.filter((data) => data.categoryId === 1);
 
-      setData({
-        car,
-        clothing,
-        accessory,
-      });
+        setData({
+          car,
+          clothing,
+          accessory,
+        });
+      }
     };
 
     fetchProducts();
@@ -64,13 +64,20 @@ const Home = () => {
       <Banner />
       <Feauter_1 />
       {/* First CardList with its own slider class */}
-      <CardList title="Top Super Car Deal" data={data.car} sliderClassName="slider1" />
-
-      <MarqueeAnimation title={titleCar} desc={descCar} /> {/* Scroll Notification */}
-      
-      <CardList title="Clothing" data={data.clothing} sliderClassName="slider2" />
-      <MarqueeAnimation title={titleOther} desc={descOther} /> {/* Scroll Notification */}
-
+      <CardList
+        title="Top Super Car Deal"
+        data={data.car}
+        sliderClassName="slider1"
+      />
+      <MarqueeAnimation title={titleCar} desc={descCar} />{" "}
+      {/* Scroll Notification */}
+      <CardList
+        title="Clothing"
+        data={data.clothing}
+        sliderClassName="slider2"
+      />
+      <MarqueeAnimation title={titleOther} desc={descOther} />{" "}
+      {/* Scroll Notification */}
       <CardList
         title="Accessory"
         data={data.accessory}

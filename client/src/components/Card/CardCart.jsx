@@ -66,7 +66,7 @@ const CheckoutButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const CartCart = ({ initialCartItems = [] }) => {
+const CardCart = ({ initialCartItems = [] }) => {
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbar, setSnackbar] = useState({
@@ -359,7 +359,7 @@ const CartCart = ({ initialCartItems = [] }) => {
   );
 };
 
-CartCart.propTypes = {
+CardCart.propTypes = {
   initialCartItems: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -371,4 +371,4 @@ CartCart.propTypes = {
   ),
 };
 
-export default CartCart;
+export default CardCart;

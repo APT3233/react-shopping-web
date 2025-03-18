@@ -1,28 +1,29 @@
 import logo from "../../../assets/img/logo.png";
-import "../../../assets/css/header.css";
 import { useState, useEffect } from "react";
 import { Select, Button, Row, Col } from "antd";
+import Navbar from "./Navbar";
+import { NavLink, useNavigate } from "react-router-dom";
+import { clearCookie, getCookie } from "../../../utils/security";
+import { getCategories } from "../../../services/Categories";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import Navbar from "./Navbar";
-import { NavLink } from "react-router-dom";
-import { clearCookie, getCookie } from "../../../utils/security";
-
-// Fetch API call /api/categories
-const OPTIONS = ["Clothes", "Electronic", "Bananas", "Helicopters"];
+import "../../../assets/css/header.css";
 
 export default function Header() {
   const [selectedItems, setSelectedItems] = useState([]);
-  const filteredOptions = OPTIONS.filter((o) => !selectedItems.includes(o));
   const [loadings, setLoadings] = useState([]);
   const [isHidden, setIsHidden] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
 
   const isLoggedIn = getCookie("access_token");
+
   const handleLogout = () => {
     clearCookie();
     window.location.href = "/sign-in";
   };
+
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
@@ -30,12 +31,15 @@ export default function Header() {
       return newLoadings;
     });
     setTimeout(() => {
+      handleSearch()
       setLoadings((prevLoadings) => {
         const newLoadings = [...prevLoadings];
         newLoadings[index] = false;
         return newLoadings;
       });
-    }, 3000);
+      
+    }, 2000);
+    
   };
 
   const className = (e) => {
@@ -53,6 +57,33 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
 
+  useEffect(() => {
+    const getSearchData = async () => {
+      try {
+        const response = await getCategories();
+        if (response?.success) {
+          const categoryNames = response.message.data.map((item) => item.name);
+          setCategories(categoryNames);
+        } else {
+          console.error("Failed to fetch categories:", response?.error);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    getSearchData();
+  }, []);
+
+  const filteredOptions = categories.filter(
+    (name) => !selectedItems.includes(name)
+  );
+  const handleSearch = () => {
+    if (selectedItems.length > 0) {
+      const selected = selectedItems.map((i) => i.toLowerCase());
+      const query = `categories=${selected.join(",")}`;
+      navigate(`search?${query}`);
+    }
+  };
   return (
     <>
       <div
@@ -96,23 +127,27 @@ export default function Header() {
                 >
                   <Select
                     mode="multiple"
-                    placeholder="Search product"
+                    placeholder="Search category "
                     value={selectedItems}
                     onChange={setSelectedItems}
+                    
                     style={{
                       width: "100%",
                       marginRight: "10px",
                       backgroundColor: "#f3f4f9",
                     }}
-                    options={filteredOptions.map((item) => ({
-                      value: item,
-                      label: item,
+                    options={filteredOptions.map((name) => ({
+                      value: name,
+                      label: name,
                     }))}
                   />
                   <Button
                     type="primary"
                     loading={loadings[0]}
-                    onClick={() => enterLoading(0)}
+                    onClick={() => {
+                      enterLoading(0)
+                      // handleSearch()
+                    }}
                     style={{ backgroundColor: "#202738" }}
                   >
                     Search

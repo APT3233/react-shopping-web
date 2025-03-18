@@ -1,43 +1,40 @@
 package com.apt.model;
 
 public class Category {
-	private String categoryID;
-	private String categoryName;
-	private String categoryDescription;
+    private int categoryId;
+    private String name;
+    private String description;
 
-	public Category(String categoryID, String categoryName, String categoryDescription) {
-		super();
-		this.categoryID = categoryID;
-		this.categoryName = categoryName;
-		this.categoryDescription = categoryDescription;
-	}
+    public Category() {}
 
-	public Category() {
-		super();
-	}
+    public Category(int categoryId, String name, String description) {
+        this.categoryId = categoryId;
+        this.name = name;
+        this.description = description;
+    }
 
-	public String getCategoryID() {
-		return categoryID;
-	}
+    // Getters and Setters
+    public int getCategoryId() {
+        return categoryId;
+    }
 
-	public void setCategoryID(String categoryID) {
-		this.categoryID = categoryID;
-	}
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public String getCategoryName() {
-		return categoryName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getCategoryDescription() {
-		return categoryDescription;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setCategoryDescription(String categoryDescription) {
-		this.categoryDescription = categoryDescription;
-	}
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
