@@ -1,26 +1,31 @@
-<h1 align="center">
-  <br>
-  <a href="http://apt3233.id.vn"><img src="doc/img/logo.png" alt="Markdownify" width="200"></a>
-  <br>
-  sixMemShop
-  <br>
-</h1>
 
-<h4 align="center">Shopping Online</h4>
 
-<p align="center">
-<a href="#language-and-tool">Key Language & Tool</a> •
-  <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#download">Download</a> 
-</p>
+# 🛍️ sixMemShop  
 
-## Language and Tool
+### 🌐 Your Ultimate Online Shopping Experience  
 
-- FrontEnd
-  - ReactJs (vite)
-  - antdesign, material UI (UI)
-- BackEnd
-  - Java Spring boot v3.4.3
-    - JDK 21
-    - Maven
+<p align="center">  
+  <a href="http://apt3233.id.vn"><img src="doc/img/logo.png" alt="sixMemShop Logo" width="200"></a>  
+</p>  
+
+## 📌 Table of Contents  
+
+- [🚀 Tech Stack](#-tech-stack)  
+- [✨ Key Features](#-key-features)  
+- [📖 How To Use](#-how-to-use)  
+- [📥 Download](#-download)  
+
+---
+
+## 🚀 Tech Stack  
+
+### 🔹 Frontend  
+✅ **React.js (Vite)** – High-performance frontend framework  
+✅ **Ant Design & Material UI** – Modern and intuitive UI components  
+
+### 🔹 Backend  
+✅ **Java Servlet, Java EE* – Powerful and scalable backend framework  
+✅ **JDK 21** – The latest Java version for optimal efficiency  
+✅ **Maven** – Streamlined dependency and project management  
+
+Stay tuned for more features and enhancements! 🚀
