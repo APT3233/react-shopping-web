@@ -24,7 +24,7 @@
 ✅ **Ant Design & Material UI** – Modern and intuitive UI components  
 
 ### 🔹 Backend  
-✅ **Java Servlet, Java EE* – Powerful and scalable backend framework  
+✅ **JAVA Servlet, JAVA EE** – Powerful and scalable backend framework  
 ✅ **JDK 21** – The latest Java version for optimal efficiency  
 ✅ **Maven** – Streamlined dependency and project management  
 
