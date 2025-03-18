@@ -1,86 +1,45 @@
 package com.apt.model;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 public class Order {
-	private String orderID;
-	private String userID;
-	private LocalDate orderDate;
-	private double totalAmount;
-	private String status;
-	private String discountID;
-	private String shoppingAddressID;
+    private int orderId;
+    private int userId;
+    private int productId;
+    private int numberBuy;
+    private double price;
+    private String status; 
+    private String address;
+    private Timestamp date;
 
-	public Order() {
-		super();
-	}
+    public Order() {}
 
-	public Order(String orderID, String userID, LocalDate orderDate, double totalAmount, String status,
-			String discountID, String shoppingAddressID) {
-		super();
-		this.orderID = orderID;
-		this.userID = userID;
-		this.orderDate = orderDate;
-		this.totalAmount = totalAmount;
-		this.status = status;
-		this.discountID = discountID;
-		this.shoppingAddressID = shoppingAddressID;
-	}
+    public Order(int orderId, int userId, int productId, int numberBuy, double price, String status, String address, Timestamp date) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.productId = productId;
+        this.numberBuy = numberBuy;
+        this.price = price;
+        this.status = status;
+        this.address = address;
+        this.date = date;
+    }
 
-	public String getOrderID() {
-		return orderID;
-	}
-
-	public void setOrderID(String orderID) {
-		this.orderID = orderID;
-	}
-
-	public String getUserID() {
-		return userID;
-	}
-
-	public void setUserID(String userID) {
-		this.userID = userID;
-	}
-
-	public LocalDate getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(LocalDate orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public double getTotalAmount() {
-		return totalAmount;
-	}
-
-	public void setTotalAmount(double totalAmount) {
-		this.totalAmount = totalAmount;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getDiscountID() {
-		return discountID;
-	}
-
-	public void setDiscountID(String discountID) {
-		this.discountID = discountID;
-	}
-
-	public String getShoppingAddressID() {
-		return shoppingAddressID;
-	}
-
-	public void setShoppingAddressID(String shoppingAddressID) {
-		this.shoppingAddressID = shoppingAddressID;
-	}
-
+    // Getter & Setter
+    public int getOrderId() { return orderId; }
+    public void setOrderId(int orderId) { this.orderId = orderId; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
+    public int getNumberBuy() { return numberBuy; }
+    public void setNumberBuy(int numberBuy) { this.numberBuy = numberBuy; }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public Timestamp getDate() { return date; }
+    public void setDate(Timestamp date) { this.date = date; }
 }

@@ -76,7 +76,7 @@ CREATE TABLE `order` (
   `user_id` INT NOT NULL,
   `product_id` INT NOT NULL,
   `number_buy` INT NOT NULL,
-  `total_price` DECIMAL(13, 2) NOT NULL,
+  `price` DECIMAL(13, 2) NOT NULL,
   `status` ENUM('paid', 'unpaid') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

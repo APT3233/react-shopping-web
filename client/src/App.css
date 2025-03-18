@@ -5,3 +5,12 @@ body{
 .slick-list{
   padding: 20px 0!important;
 }
+
+html, body {
+  height: 100%;
+  background-color: rgb(249, 249, 249);
+}
+
+
+
+

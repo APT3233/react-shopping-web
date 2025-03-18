@@ -81,7 +81,7 @@ export default function Header() {
                     <img
                       src={logo}
                       alt="logo-team"
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", userSelect: "none" }}
                     />
                   </NavLink>
                 </div>

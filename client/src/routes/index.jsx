@@ -10,6 +10,7 @@ import Home from "../pages/home";
 import Cart from "../pages/cart";
 import Contact from "../pages/contact";
 import CheckOut from "../pages/check-out";
+import ProductItem from "../pages/product/ProductItem";
 
 const routes = [
   {
@@ -23,6 +24,10 @@ const routes = [
       {
         path: "product",
         element: <Product />
+      },
+      {
+        path: "product/detail/:id",
+        element: <ProductItem />
       },
       {
         path: "cart",

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.apt.utils.HashUtils;;
+
 public class AuthenticationDAO {
 
     public AuthenticationDAO() {
@@ -23,8 +24,7 @@ public class AuthenticationDAO {
             if (rs.next()) {
                 String storedHash = rs.getString("password");
                 String role = rs.getString("role");
-                System.out.println("Pass Client: " + password);
-                System.out.println("StorePass: " + storedHash);
+                System.out.println("Passwd: " + storedHash);
                 if (HashUtils.verifyPassword(password, storedHash))
                     return "admin".equals(role) ? 2 : 1;
 

@@ -9,23 +9,27 @@ import {
   Container,
 } from "@mui/material";
 import { Star, StarBorder } from "@mui/icons-material";
-import { styled } from "@mui/system";
+import { styled, width } from "@mui/system";
 import { FaShoppingCart } from "react-icons/fa";
 import PropTypes from "prop-types";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import CardTitle from "./CardTitle";
+import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../utils/security";
+import { ALERT, CONFIRM } from "../../utils/Alert";
+import { addToCart } from "../../services/CartService";
 
 // Styled components
 const StyledCard = styled(Card)(({ theme }) => ({
   height: "100%",
-  width: "90%", 
+  width: "90%",
   display: "flex",
   flexDirection: "column",
   borderRadius: "16px",
   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-  margin: "0 auto", 
+  margin: "0 auto",
   "&:hover": {
     boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)",
   },
@@ -35,7 +39,7 @@ const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
   objectFit: "cover",
   transition: "transform 0.3s ease",
   "&:hover": {
-    transform: "scale(1.15)", 
+    transform: "scale(1.15)",
   },
 }));
 
@@ -69,13 +73,14 @@ const NavigationButton = styled(Button)(({ theme }) => ({
     backgroundColor: "transparent",
     padding: "20px 0",
     "&:hover": {
-      backgroundColor: "transparent", 
+      backgroundColor: "transparent",
     },
   },
 }));
 
 const CardList = ({ title, data, sliderClassName }) => {
   const products = data || [];
+  const navigate = useNavigate();
 
   const settings = {
     dots: true,
@@ -118,6 +123,19 @@ const CardList = ({ title, data, sliderClassName }) => {
     );
   }
 
+  const handleCheckClick = async (item) => {
+    const isLoggedIn = getCookie("access_token");
+    if (!isLoggedIn) {
+      CONFIRM("Login Required", "Please login now", "warning", () => {
+        window.location.href = "/sign-in";
+      });
+    } else {
+      console.log(item);
+      const result = await addToCart(null, item.productId, item.price);
+      console.log(result);
+    }
+  };
+
   return (
     <>
       <CardTitle title={title} />
@@ -137,6 +155,11 @@ const CardList = ({ title, data, sliderClassName }) => {
                     e.target.src =
                       "https://images.unsplash.com/photo-1560393464-5c69a73c5770";
                   }}
+                  onClick={() =>
+                    navigate(`/product/detail/${product.productId}`, {
+                      state: { product },
+                    })
+                  }
                 />
                 <CardContent sx={{ p: 3 }}>
                   <Typography
@@ -202,6 +225,7 @@ const CardList = ({ title, data, sliderClassName }) => {
                     variant="contained"
                     startIcon={<FaShoppingCart />}
                     fullWidth
+                    onClick={() => handleCheckClick(product)}
                   >
                     Add to Cart
                   </AddToCartButton>
@@ -212,14 +236,18 @@ const CardList = ({ title, data, sliderClassName }) => {
         </Slider>
         {/* Navigation Buttons */}
         <NavigationButton
-          onClick={() => document.querySelector(`.${sliderClassName} .slick-prev`).click()}
+          onClick={() =>
+            document.querySelector(`.${sliderClassName} .slick-prev`).click()
+          }
           aria-label="Previous"
           sx={{ left: -50 }}
         >
           &#10094;
         </NavigationButton>
         <NavigationButton
-          onClick={() => document.querySelector(`.${sliderClassName} .slick-next`).click()}
+          onClick={() =>
+            document.querySelector(`.${sliderClassName} .slick-next`).click()
+          }
           aria-label="Next"
           sx={{ right: -50 }}
         >
@@ -229,7 +257,6 @@ const CardList = ({ title, data, sliderClassName }) => {
     </>
   );
 };
-
 
 CardList.propTypes = {
   data: PropTypes.arrayOf(

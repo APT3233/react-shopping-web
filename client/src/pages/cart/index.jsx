@@ -1,27 +1,32 @@
-import { useState, useEffect } from "react";
-import instance from "../../utils/customizeAxios";
+import CartCart from "../../components/Card/CardCart";
 
+const data = [
+  {
+    id: 1,
+    name: "Premium Wireless Headphones",
+    price: 199.99,
+    quantity: 1,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+  },
+  {
+    id: 2,
+    name: "Smart Watch Series 5",
+    price: 299.99,
+    quantity: 2,
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+  },
+  {
+    id: 3,
+    name: "Laptop Pro 2023",
+    price: 1299.99,
+    quantity: 1,
+    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+  },
+];
 
-const Cart = () => {  
-  const [data, setData] = useState();
-  // Test API from Server
-  useEffect(() => {
-    const fetchTest = async () => {
-      instance
-        .get("/api/user", {
-          withCredentials: false,
-        })
-        .then((response) => {
-          console.log("data: ", response.data);
-          setData(response.data);
-        })
-        .catch((err) => console.error(err));
-    };
-    fetchTest();
-  }, []);
+const Cart = () => {
 
-  return <>Data --- </>;
-}
+  return <><CartCart initialCartItems={data} /></>;
+};
 
-
-export default Cart
+export default Cart;

@@ -8,11 +8,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { NavLink } from "react-router-dom"; 
+import { NavLink } from "react-router-dom";
+import { getCookie, clearCookie } from "../../../utils/security";
 
 const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [focusedItem, setFocusedItem] = useState(null); 
+  const [focusedItem, setFocusedItem] = useState(null);
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const handleDrawerToggle = () => {
@@ -20,11 +21,17 @@ const Navbar = () => {
   };
 
   const handleFocus = (item) => {
-    setFocusedItem(item); 
+    setFocusedItem(item);
   };
 
   const handleBlur = () => {
     setFocusedItem(null);
+  };
+
+  const isLoggedIn = getCookie("access_token"); 
+  const handleLogout = () => {
+    clearCookie(); 
+    window.location.href = "/sign-in";
   };
 
   return (
@@ -46,27 +53,44 @@ const Navbar = () => {
           tabIndex={-1}
         >
           <List>
-            {["Home", "Product", "Cart", "Contact", "Login"].map((text) => (
+            {["Home", "Product", "Cart", "Contact"].map((text) => (
               <ListItem
                 key={text}
                 button
-                component={NavLink} 
+                component={NavLink}
                 to={
-                  text === "Home" ? "/" :
-                  text === "Login" ? "/sign-in" :
-                  `/${text.toLowerCase()}`
+                  text === "Home"
+                    ? "/"
+                    : `/${text.toLowerCase()}`
                 }
                 style={{
                   textDecoration: "none",
                   color: "black",
-                  backgroundColor: focusedItem === text ? "#e0e0e0" : "transparent", // Làm nổi bật khi focus
+                  backgroundColor:
+                    focusedItem === text ? "#e0e0e0" : "transparent", // Làm nổi bật khi focus
                 }}
-                onFocus={() => handleFocus(text)} 
-                onBlur={handleBlur} 
+                onFocus={() => handleFocus(text)}
+                onBlur={handleBlur}
               >
                 <ListItemText primary={text} />
               </ListItem>
             ))}
+            <ListItem
+              button
+              onClick={isLoggedIn ? handleLogout : undefined} 
+              component={NavLink}
+              to={isLoggedIn ? "/" : "/sign-in"}
+              style={{
+                textDecoration: "none",
+                color: "black",
+                backgroundColor:
+                  focusedItem === "Login" ? "#e0e0e0" : "transparent",
+              }}
+              onFocus={() => handleFocus("Login")}
+              onBlur={handleBlur}
+            >
+              <ListItemText primary={isLoggedIn ? "Logout" : "Login"} />
+            </ListItem>
           </List>
         </Drawer>
       )}

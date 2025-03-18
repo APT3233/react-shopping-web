@@ -2,7 +2,9 @@ package com.apt.controller;
 
 import com.apt.dao.DataBaseConnector;
 import com.apt.services.AuthenticationService;
+import com.apt.services.UserService;
 import com.apt.services.impl.AuthenticationServiceImpl;
+import com.apt.services.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
@@ -23,11 +25,13 @@ import jakarta.servlet.annotation.WebServlet;
 public class Authentication extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private AuthenticationService authService;
+    private UserService userService;
     private static final long EXPIRATION_TIME = 864_000_000;
 
     public Authentication() {
         super();
         this.authService = new AuthenticationServiceImpl();
+        this.userService = new UserServiceImpl();
     }
 
     @Override
@@ -83,17 +87,18 @@ public class Authentication extends HttpServlet {
         int role = authService.signIn(email, password);
         System.out.println("Role: " + role);
         if (role != -1) {
+            int userID = userService.getUserId(email);
             String accessToken = generateAccessToken(email, role);
             HttpSession session = request.getSession();
+            session.setAttribute("user_id", userID);
             session.setAttribute("email", email);
             session.setAttribute("role", role);
             session.setAttribute("access_token", accessToken);
 
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(String.format(
-                "{\"status\": \"success\", \"access_token\": \"%s\", \"role\": %d}",
-                accessToken, role
-            ));
+                    "{\"status\": \"success\", \"access_token\": \"%s\", \"role\": %d}",
+                    accessToken, role));
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("{\"error\": \"Invalid email or password\"}");
@@ -106,7 +111,6 @@ public class Authentication extends HttpServlet {
         String email;
         String password;
 
-        // Kiểm tra Content-Type để xác định cách lấy dữ liệu
         String contentType = request.getContentType();
         if (contentType != null && contentType.contains("application/json")) {
             ObjectMapper mapper = new ObjectMapper();
@@ -126,7 +130,6 @@ public class Authentication extends HttpServlet {
                 return;
             }
         } else {
-            // Nhận dữ liệu từ form POST
             name = request.getParameter("name");
             email = request.getParameter("email");
             password = request.getParameter("password");
@@ -135,7 +138,7 @@ public class Authentication extends HttpServlet {
         System.out.println("[-] Name: " + name + "\n[-] Email: " + email + "\n[-] Pass: " + password);
 
         if (name == null || email == null || password == null ||
-            name.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty()) {
+                name.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"error\": \"Name, email, and password are required\"}");
             return;
@@ -144,13 +147,19 @@ public class Authentication extends HttpServlet {
         int result = authService.signUp(name, email, password);
 
         if (result == 1) {
-            String accessToken = generateAccessToken(email, 1); // Role mặc định là "user" (1)
+            int userId = userService.getUserId(email); 
+            String accessToken = generateAccessToken(email, 1); 
+
+            HttpSession session = request.getSession(true); 
+            session.setAttribute("user_id", userId);
+            session.setAttribute("email", email);
+            session.setAttribute("role", 1);
+            session.setAttribute("access_token", accessToken);
 
             response.setStatus(HttpServletResponse.SC_CREATED);
             response.getWriter().write(String.format(
-                "{\"status\": \"success\", \"access_token\": \"%s\", \"role\": 1}",
-                accessToken
-            ));
+                    "{\"status\": \"success\", \"access_token\": \"%s\", \"role\": 1}",
+                    accessToken));
         } else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"error\": \"Email already exists or registration failed\"}");
