@@ -21,7 +21,7 @@ function ForgotPassword({ open, handleClose }) {
   const [isCorrect, setIsCorrect] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef([]);
 
   const handleEmailSubmit = async (event) => {
@@ -45,7 +45,7 @@ function ForgotPassword({ open, handleClose }) {
     } catch (error) {
       alert("An error occurred while sending the password reset email");
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -59,11 +59,11 @@ function ForgotPassword({ open, handleClose }) {
       setIsCorrect(true);
       setTimeout(() => {
         setStep(3);
-        setIsLoading(false); 
+        setIsLoading(false);
       }, 500);
     } else {
       setIsCorrect(false);
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -95,13 +95,9 @@ function ForgotPassword({ open, handleClose }) {
     } catch (error) {
       if (error.response) {
         const errorData = error.response.data;
-        alert(
-          errorData.error || "An error occurred while resetting the password."
-        );
+        alert(errorData.error || "An error occurred while resetting the password.");
       } else if (error.request) {
-        alert(
-          "No response from the server. Please check your network connection."
-        );
+        alert("No response from the server. Please check your network connection.");
       } else {
         alert("Méo biết lỗi giề. Đừng thử nữa");
       }
@@ -150,7 +146,13 @@ function ForgotPassword({ open, handleClose }) {
     <>
       <DialogTitle>Reset password</DialogTitle>
       <DialogContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          width: "100%",
+          px: { xs: 1, sm: 2 }, // Giảm padding trên mobile
+        }}
       >
         <DialogContentText>
           Enter your account's email address, and we'll send you a link to reset
@@ -169,15 +171,11 @@ function ForgotPassword({ open, handleClose }) {
           autoComplete="off"
         />
       </DialogContent>
-      <DialogActions sx={{ pb: 3, px: 3 }}>
+      <DialogActions sx={{ pb: 3, px: { xs: 1, sm: 3 } }}>
         <Button onClick={handleClose} disabled={isLoading}>
           Cancel
         </Button>
-        <Button
-          variant="contained"
-          type="submit"
-          disabled={isLoading}
-        >
+        <Button variant="contained" type="submit" disabled={isLoading}>
           {isLoading ? <Spin /> : "Continue"}
         </Button>
       </DialogActions>
@@ -188,7 +186,13 @@ function ForgotPassword({ open, handleClose }) {
     <>
       <DialogTitle>Enter Verification Code</DialogTitle>
       <DialogContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          width: "100%",
+          px: { xs: 1, sm: 2 }, // Giảm padding trên mobile
+        }}
       >
         <DialogContentText>
           We've sent a 6-digit verification code to {email}. Please enter it
@@ -199,8 +203,11 @@ function ForgotPassword({ open, handleClose }) {
           onSubmit={handleCodeSubmit}
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            maxWidth: "350px",
+            flexWrap: "wrap", // Cho phép xuống dòng trên mobile
+            justifyContent: "center",
+            gap: 1,
+            width: "100%",
+            maxWidth: { xs: "100%", sm: "350px" }, // 100% trên mobile, 350px trên PC
             mx: "auto",
           }}
         >
@@ -219,10 +226,10 @@ function ForgotPassword({ open, handleClose }) {
               onChange={(e) => handleInputChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               sx={{
-                width: "70px",
+                width: { xs: "40px", sm: "50px" }, // Giảm width trên mobile
                 "& .MuiOutlinedInput-root": {
-                  height: "60px",
-                  width: "50px",
+                  height: { xs: "40px", sm: "60px" }, // Giảm height trên mobile
+                  width: "100%",
                   "& fieldset": {
                     borderColor:
                       isCorrect === null ? "grey" : isCorrect ? "green" : "red",
@@ -254,15 +261,11 @@ function ForgotPassword({ open, handleClose }) {
           `}
         </style>
       </DialogContent>
-      <DialogActions sx={{ pb: 3, px: 3 }}>
+      <DialogActions sx={{ pb: 3, px: { xs: 1, sm: 3 } }}>
         <Button onClick={() => setStep(1)} disabled={isLoading}>
           Back
         </Button>
-        <Button
-          variant="contained"
-          onClick={handleCodeSubmit}
-          disabled={isLoading}
-        >
+        <Button variant="contained" onClick={handleCodeSubmit} disabled={isLoading}>
           Verify
         </Button>
       </DialogActions>
@@ -277,7 +280,8 @@ function ForgotPassword({ open, handleClose }) {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          minWidth: "500px",
+          width: { xs: "100%", sm: "350px" },
+          px: { xs: 1, sm: 2 }, 
         }}
       >
         <DialogContentText>Enter your new password below:</DialogContentText>
@@ -291,7 +295,7 @@ function ForgotPassword({ open, handleClose }) {
           fullWidth
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          sx={{ maxWidth: "400px", mx: "auto" }}
+          sx={{ maxWidth: { xs: "100%", sm: "400px"}, mx: "auto" }} 
         />
         <TextField
           required
@@ -302,10 +306,10 @@ function ForgotPassword({ open, handleClose }) {
           fullWidth
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          sx={{ maxWidth: "400px", mx: "auto" }}
+          sx={{ maxWidth: { xs: "100%", sm: "400px" }, mx: "auto" }}
         />
       </DialogContent>
-      <DialogActions sx={{ pb: 3, px: 3 }}>
+      <DialogActions sx={{ pb: 3, px: { xs: 1, sm: 3 } }}>
         <Button onClick={() => setStep(2)} disabled={isLoading}>
           Back
         </Button>
@@ -329,7 +333,11 @@ function ForgotPassword({ open, handleClose }) {
               : step === 3
               ? handlePasswordSubmit
               : handleCodeSubmit,
-          sx: { backgroundImage: "none" },
+          sx: {
+            backgroundImage: "none",
+            width: { xs: "90%", sm: "auto" }, 
+            maxWidth: "100%", 
+          },
         },
       }}
     >
