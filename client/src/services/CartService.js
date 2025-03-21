@@ -7,8 +7,10 @@ export const addToCart = async (userId, productId, price) => {
       userId: userId,
       productId: productId,
       quantity: 1,
-      price: price
-    })
+      price: price,
+    },
+    
+  )
     if(response.status === 200 || response.status === 201){
       return {
         success: true,

@@ -52,3 +52,34 @@ export const signUp = async (name, email, password) => {
     };
   }
 };
+
+export const getPassByEmail = async (email) => {
+  try {
+    const response = await instance.get("/api/auth/forgot-password", {
+      params: {
+        email: email,
+      },
+    });
+
+    if (response.status === 200 || response.status === 201) {
+      return {
+        success: true,
+        key: response.data?.key,
+        data: response?.data?.message,
+      };
+    } else {
+      return {
+        success: false,
+        error: response.data?.message || "Unexpected response status",
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error.response?.data?.error ||
+        error.message ||
+        "An error occurred while fetching password reset",
+    };
+  }
+};
