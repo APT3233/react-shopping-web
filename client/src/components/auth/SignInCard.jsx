@@ -18,6 +18,9 @@ import logo from "../../assets/img/logo.png";
 import { signIn } from "../../services/Auth";
 import { setCookie } from "../../utils/security";
 import { ALERT } from "../../utils/Alert";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../redux/slices/authSlice";
+import "animate.css";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -40,11 +43,68 @@ const Card = styled(MuiCard)(({ theme }) => ({
 export default function SignInCard() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [password, setPassword] = React.useState('')
+  const [password, setPassword] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const logo = document.querySelector(".logo-animate");
+    if (logo) {
+      logo.classList.add(
+        "animate__animated",
+        "animate__bounceIn",
+        "animate__delay-0.2s"
+      );
+    }
+
+    const title = document.querySelector(".title-animate");
+    if (title) {
+      title.classList.add(
+        "animate__animated",
+        "animate__fadeInDown",
+        "animate__delay-0.3s"
+      );
+    }
+
+    const formFields = document.querySelectorAll(".form-field-animate");
+    formFields.forEach((field, index) => {
+      field.classList.add(
+        "animate__animated",
+        "animate__fadeInUp",
+        `animate__delay-${0.4 + index * 0.1}s`
+      );
+    });
+
+    const signupLink = document.querySelector(".signup-link-animate");
+    if (signupLink) {
+      signupLink.classList.add(
+        "animate__animated",
+        "animate__fadeIn",
+        "animate__delay-0.8s"
+      );
+    }
+
+    const divider = document.querySelector(".divider-animate");
+    if (divider) {
+      divider.classList.add(
+        "animate__animated",
+        "animate__fadeIn",
+        "animate__delay-0.9s"
+      );
+    }
+
+    const socialButtons = document.querySelectorAll(".social-button-animate");
+    socialButtons.forEach((button, index) => {
+      button.classList.add(
+        "animate__animated",
+        "animate__fadeInUp",
+        `animate__delay-${1 + index * 0.1}s`
+      );
+    });
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,27 +120,62 @@ export default function SignInCard() {
       return;
     }
     event.preventDefault();
+
+    // animation when submit form
+    const submitButton = document.querySelector(".submit-button-animate");
+    if (submitButton) {
+      submitButton.classList.add("animate__animated", "animate__pulse");
+    }
+
     try {
       const data = new FormData(event.currentTarget);
       const email = data.get("email");
-      const passwd = data.get("password")
+      const passwd = data.get("password");
 
       const response = await signIn(email, passwd);
-      setCookie('access_token', response?.access_token, 10)
-      if(response.success){
-        ALERT('Successfully', 'Welcome back', 'success', () => {
-          navigate('/')
-        })
-      } else {
-        setPassword('')
-        setPasswordError(false)
-        setPasswordErrorMessage('')
-        ALERT('Login Failed', response.error, 'error')
-      }
+      if (response.success) {
+        const userData = {
+          email: email,
+          role: "user",
+        };
+        setCookie("access_token", response?.access_token, 10);
+        dispatch(
+          loginSuccess({ user: userData, token: response.access_token })
+        );
 
+        // animation success
+        const card = document.querySelector(".card-container");
+        if (card) {
+          card.classList.remove("animate__bounceInLeft");
+          card.classList.add("animate__animated", "animate__fadeOutUp");
+          setTimeout(() => {
+            ALERT("Successfully", "Welcome back", "success", () => {
+              navigate("/");
+            });
+          }, 500);
+        } else {
+          ALERT("Successfully", "Welcome back", "success", () => {
+            navigate("/");
+          });
+        }
+      } else {
+        setPassword("");
+        setPasswordError(false);
+        setPasswordErrorMessage("");
+
+        ALERT("Login Failed", response.error, "error");
+      }
     } catch (error) {
       if (error.response) {
         console.error("Error:", error.response);
+      }
+
+      const card = document.querySelector(".card-container");
+      if (card) {
+        card.classList.add("animate__animated", "animate__shakeX");
+        setTimeout(() => {
+          card.classList.remove("animate__shakeX");
+        }, 1000);
       }
     }
   };
@@ -95,6 +190,15 @@ export default function SignInCard() {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
       isValid = false;
+
+      // Thêm hiệu ứng rung cho trường email nếu lỗi
+      const emailField = document.querySelector(".email-field-animate");
+      if (emailField) {
+        emailField.classList.add("animate__animated", "animate__headShake");
+        setTimeout(() => {
+          emailField.classList.remove("animate__headShake");
+        }, 1000);
+      }
     } else {
       setEmailError(false);
       setEmailErrorMessage("");
@@ -104,6 +208,15 @@ export default function SignInCard() {
       setPasswordError(true);
       setPasswordErrorMessage("Password must be at least 6 characters long.");
       isValid = false;
+
+      // Thêm hiệu ứng rung cho trường password nếu lỗi
+      const passwordField = document.querySelector(".password-field-animate");
+      if (passwordField) {
+        passwordField.classList.add("animate__animated", "animate__headShake");
+        setTimeout(() => {
+          passwordField.classList.remove("animate__headShake");
+        }, 1000);
+      }
     } else {
       setPasswordError(false);
       setPasswordErrorMessage("");
@@ -113,12 +226,12 @@ export default function SignInCard() {
   };
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" className="card-container ">
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
-        {/* <SitemarkIcon /> */}
         <img
           src={logo}
           alt="logo"
+          className="logo-animate"
           style={{ width: "50px", cursor: "pointer" }}
           onClick={() => navigate("/")}
         />
@@ -126,6 +239,7 @@ export default function SignInCard() {
       <Typography
         component="h1"
         variant="h4"
+        className="title-animate"
         sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
       >
         Sign in
@@ -136,7 +250,7 @@ export default function SignInCard() {
         noValidate
         sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
       >
-        <FormControl>
+        <FormControl className="form-field-animate email-field-animate">
           <FormLabel htmlFor="email">Email</FormLabel>
           <TextField
             error={emailError}
@@ -153,7 +267,7 @@ export default function SignInCard() {
             color={emailError ? "error" : "primary"}
           />
         </FormControl>
-        <FormControl>
+        <FormControl className="form-field-animate password-field-animate">
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <FormLabel htmlFor="password">Password</FormLabel>
             <Link
@@ -161,6 +275,7 @@ export default function SignInCard() {
               type="button"
               onClick={handleClickOpen}
               variant="body2"
+              className="forgot-password-animate"
               sx={{ alignSelf: "baseline" }}
             >
               Forgot your password?
@@ -184,6 +299,7 @@ export default function SignInCard() {
           />
         </FormControl>
         <FormControlLabel
+          className="form-field-animate"
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
@@ -193,25 +309,35 @@ export default function SignInCard() {
           fullWidth
           variant="contained"
           onClick={validateInputs}
+          className="form-field-animate submit-button-animate"
         >
           Sign in
         </Button>
-        <Typography sx={{ textAlign: "center" }}>
+        <Typography
+          sx={{ textAlign: "center" }}
+          className="signup-link-animate"
+        >
           Don&apos;t have an account?{" "}
           <span>
-            <NavLink to="/sign-up" variant="body2" sx={{ alignSelf: "center" }}>
+            <NavLink
+              to="/sign-up"
+              variant="body2"
+              className="animate__animated animate__pulse animate__infinite animate__slower"
+              sx={{ alignSelf: "center" }}
+            >
               Sign up
             </NavLink>
           </span>
         </Typography>
       </Box>
-      <Divider>or</Divider>
+      <Divider className="divider-animate">or</Divider>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <Button
           fullWidth
           variant="outlined"
           onClick={() => alert("SOON")}
           startIcon={<GoogleIcon />}
+          className="social-button-animate"
         >
           Sign in with Google
         </Button>
@@ -220,6 +346,7 @@ export default function SignInCard() {
           variant="outlined"
           onClick={() => alert("SOON")}
           startIcon={<FacebookIcon />}
+          className="social-button-animate"
         >
           Sign in with Facebook
         </Button>

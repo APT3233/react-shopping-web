@@ -21,7 +21,6 @@ public class TestServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Đặt Content-Type là application/json để trả về dữ liệu dạng JSON
         response.setContentType("application/json;charset=UTF-8");
 
         // Tạo đối tượng JSON

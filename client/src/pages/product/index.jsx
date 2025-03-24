@@ -1,7 +1,7 @@
 import CardList from "../../components/Card/CardList";
 import MarqueeAnimation from "../../components/ui/Marquee";
 import instance from "../../utils/customizeAxios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 
 const titleCar = "Black Friday ";
 const descCar = [
@@ -35,48 +35,59 @@ const Product = () => {
     clothing: [],
     accessory: [],
   });
+  const [loading, setLoading] = useState(false);
+  const MemoizedCardList = memo(CardList);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = instance.get("/api/products", {
-        withCredentials: false,
-      });
+      try {
+        setLoading(true);
+        const response = await instance.get("/api/products", {
+          withCredentials: false,
+        });
 
-      const data = (await response).data;
-      const car = data.filter((data) => data.categoryId === 3);
-      const clothing = data.filter((data) => data.categoryId === 2);
-      const accessory = data.filter((data) => data.categoryId === 1);
+        const data = response.data;
+        const car = data.filter((data) => data.categoryId === 3);
+        const clothing = data.filter((data) => data.categoryId === 2);
+        const accessory = data.filter((data) => data.categoryId === 1);
 
-      setData({
-        car,
-        clothing,
-        accessory,
-      });
+        setData({
+          car,
+          clothing,
+          accessory,
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     };
-
     fetchProducts();
   }, []);
 
   return (
     <>
-      <CardList
+      <MemoizedCardList
         title="Top Super Car Deal"
         data={data.car}
         sliderClassName="slider1"
+        isLoading={loading}
       />
-      <MarqueeAnimation title={titleCar} desc={descCar} /> {/* Scroll Notification */}
-
-      <CardList
+      <MarqueeAnimation title={titleCar} desc={descCar} />{" "}
+      {/* Scroll Notification */}
+      <MemoizedCardList
         title="Clothing"
         data={data.clothing}
         sliderClassName="slider2"
+        isLoading={loading}
       />
-      <MarqueeAnimation title={titleOther} desc={descOther} /> {/* Scroll Notification */}
-
-      <CardList
+      <MarqueeAnimation title={titleOther} desc={descOther} />{" "}
+      {/* Scroll Notification */}
+      <MemoizedCardList
         title="Accessory"
         data={data.accessory}
         sliderClassName="slider3"
+        isLoading={loading}
       />
     </>
   );

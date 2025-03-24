@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -23,6 +23,10 @@ import logo from "../../assets/img/logo.png";
 import { setCookie } from "../../utils/security";
 import { signUp } from "../../services/Auth";
 import { ALERT } from "../../utils/Alert";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../redux/slices/authSlice";
+// Import animate.css
+import 'animate.css';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -41,7 +45,44 @@ const Card = styled(MuiCard)(({ theme }) => ({
     boxShadow:
       "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
   }),
+  animation: "fadeInDown 0.8s",
 }));
+
+const AnimatedLogo = styled('img')({
+  width: "50px", 
+  cursor: "pointer",
+  animation: "pulse 1s infinite",
+});
+
+const AnimatedButton = styled(Button)({
+  position: "relative",
+  overflow: "hidden",
+  transition: "all 0.3s ease",
+  '&:hover': {
+    transform: "translateY(-3px)",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+  },
+  '&::after': {
+    content: '""',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "5px",
+    height: "5px",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    opacity: "0",
+    borderRadius: "100%",
+    transform: "scale(1, 1) translate(-50%)",
+    transformOrigin: "50% 50%",
+  },
+  '&:active::after': {
+    opacity: "1",
+    width: "100%",
+    height: "100%",
+    transform: "scale(0, 0) translate(-50%)",
+    transition: "0s",
+  },
+});
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
@@ -66,6 +107,16 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+// Animated form element wrapper
+const AnimatedFormControl = styled(FormControl)(({ delay = 0 }) => ({
+  animation: `fadeInUp 0.5s ease ${delay}s both`,
+  opacity: 0,
+}));
+
+const AnimatedTypography = styled(Typography)({
+  animation: "fadeIn 1s ease-in",
+});
+
 export default function SignUp(props) {
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
@@ -73,7 +124,14 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState("");
+  const [animate, setAnimate] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    setAnimate(true);
+  }, []);
 
   const validateInputs = () => {
     const email = document.getElementById("email");
@@ -118,6 +176,13 @@ export default function SignUp(props) {
       return;
     }
     event.preventDefault();
+    
+    // Add button animation on submit
+    const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.classList.add('animate__animated', 'animate__pulse');
+    }
+    
     try {
       const data = new FormData(event.currentTarget);
 
@@ -126,12 +191,25 @@ export default function SignUp(props) {
       const password = data.get("password");
 
       const response = await signUp(name, email, password);
-      setCookie("access_token", response?.access_token, 10);
+      
       if (response.success) {
+        setCookie("access_token", response?.access_token, 10);
+        const dataUser = {
+          email: email,
+          role: 'user'
+        };
+        dispatch(loginSuccess({data: dataUser, token: response.access_token}));
         ALERT("SignUp Successfully", "Welcome our shop", "success", () => {
           navigate("/");
         });
       } else {
+        // Add shake animation for error
+        const formElement = event.currentTarget;
+        formElement.classList.add('animate__animated', 'animate__shakeX');
+        setTimeout(() => {
+          formElement.classList.remove('animate__animated', 'animate__shakeX');
+        }, 1000);
+        
         ALERT("Failed", response.error, 'error');
       }
     } catch (error) {
@@ -144,27 +222,28 @@ export default function SignUp(props) {
       <CssBaseline enableColorScheme />
       <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
       <SignUpContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          {/* <SitemarkIcon /> */}
-          <img
+        <Card variant="outlined" className={animate ? "animate__animated animate__fadeIn" : ""}>
+          <AnimatedLogo
             src={logo}
             alt="logo"
-            style={{ width: "50px", cursor: "pointer" }}
+            className="animate__animated animate__bounceIn"
             onClick={() => navigate("/")}
           />
-          <Typography
+          <AnimatedTypography
             component="h1"
             variant="h4"
+            className="animate__animated animate__fadeInDown"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
             Sign up
-          </Typography>
+          </AnimatedTypography>
           <Box
             component="form"
             onSubmit={handleSubmit}
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            className="animate__animated animate__fadeIn"
           >
-            <FormControl>
+            <AnimatedFormControl delay={0.1}>
               <FormLabel htmlFor="name">Full name</FormLabel>
               <TextField
                 autoComplete="name"
@@ -176,9 +255,10 @@ export default function SignUp(props) {
                 error={nameError}
                 helperText={nameErrorMessage}
                 color={nameError ? "error" : "primary"}
+                className={nameError ? "animate__animated animate__shakeX" : ""}
               />
-            </FormControl>
-            <FormControl>
+            </AnimatedFormControl>
+            <AnimatedFormControl delay={0.2}>
               <FormLabel htmlFor="email">Email</FormLabel>
               <TextField
                 required
@@ -191,9 +271,10 @@ export default function SignUp(props) {
                 error={emailError}
                 helperText={emailErrorMessage}
                 color={passwordError ? "error" : "primary"}
+                className={emailError ? "animate__animated animate__shakeX" : ""}
               />
-            </FormControl>
-            <FormControl>
+            </AnimatedFormControl>
+            <AnimatedFormControl delay={0.3}>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
                 required
@@ -207,47 +288,59 @@ export default function SignUp(props) {
                 error={passwordError}
                 helperText={passwordErrorMessage}
                 color={passwordError ? "error" : "primary"}
+                className={passwordError ? "animate__animated animate__shakeX" : ""}
               />
-            </FormControl>
+            </AnimatedFormControl>
             <FormControlLabel
               control={<Checkbox value="allowExtraEmails" color="primary" />}
               label="I want to receive updates via email."
+              className="animate__animated animate__fadeIn animate__delay-4s"
             />
-            <Button
+            <AnimatedButton
               type="submit"
               fullWidth
               variant="contained"
               onClick={validateInputs}
+              className="animate__animated animate__fadeInUp animate__delay-5s"
             >
               Sign up
-            </Button>
+            </AnimatedButton>
           </Box>
-          <Divider>
+          <Divider className="animate__animated animate__fadeIn animate__delay-6s">
             <Typography sx={{ color: "text.secondary" }}>or</Typography>
           </Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Button
+          <Box 
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            className="animate__animated animate__fadeIn animate__delay-7s"
+          >
+            <AnimatedButton
               fullWidth
               variant="outlined"
               onClick={() => alert("SOON")}
               startIcon={<GoogleIcon />}
+              className="animate__animated animate__fadeInUp animate__delay-8s"
             >
               Sign up with Google
-            </Button>
-            <Button
+            </AnimatedButton>
+            <AnimatedButton
               fullWidth
               variant="outlined"
               onClick={() => alert("SOON")}
               startIcon={<FacebookIcon />}
+              className="animate__animated animate__fadeInUp animate__delay-9s"
             >
               Sign up with Facebook
-            </Button>
-            <Typography sx={{ textAlign: "center" }}>
+            </AnimatedButton>
+            <Typography 
+              sx={{ textAlign: "center" }}
+              className="animate__animated animate__fadeIn animate__delay-1s"
+            >
               Already have an account?{" "}
               <NavLink
                 to="/sign-in"
                 variant="body2"
                 sx={{ alignSelf: "center" }}
+                className="animate__animated animate__pulse animate__infinite"
               >
                 Sign in
               </NavLink>

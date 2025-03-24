@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Container, Grid, Typography, IconButton, Switch, Tooltip, useTheme } from "@mui/material";
+import { Box, Container, Grid, Typography, IconButton, Switch, Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
 import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
 import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
@@ -40,7 +40,8 @@ const SocialButton = styled(IconButton)(({ theme, darkMode }) => ({
   }
 }));
 
-const FooterLink = styled(NavLink)(({ theme, darkMode }) => ({
+const FooterLink = styled(NavLink)(({ darkMode }) => ({
+
   color: darkMode ? "#fff" : "#333",
   textDecoration: "none",
   transition: "color 0.2s ease",
@@ -75,8 +76,6 @@ const ContactItem = styled(Box)(({ theme }) => ({
 
 const Footer = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const theme = useTheme();
-
   const handleDarkModeToggle = () => {
     setDarkMode(!darkMode);
   };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import Banner from "../../components/ui/example/Banner";
 import Feauter_1 from "../../components/ui/example/Feauter_1";
 import MarqueeAnimation from "../../components/ui/Marquee";
@@ -37,51 +37,65 @@ const Home = () => {
     clothing: [],
     accessory: [],
   });
-
+  const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await getAllProducts();
+      setLoading(true);
+      try {
+        const response = await getAllProducts();
 
-      if (response.success) {
-        const data = response.data;
-        const car = data.filter((data) => data.categoryId === 3);
-        const clothing = data.filter((data) => data.categoryId === 2);
-        const accessory = data.filter((data) => data.categoryId === 1);
+        if (response.success) {
+          const data = response.data;
+          const car = data.filter((data) => data.categoryId === 3);
+          const clothing = data.filter((data) => data.categoryId === 2);
+          const accessory = data.filter((data) => data.categoryId === 1);
 
-        setData({
-          car,
-          clothing,
-          accessory,
-        });
+          setData({
+            car,
+            clothing,
+            accessory,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
+  const MemoizedCardList = memo(CardList);
+  
   return (
     <>
       <Banner />
       <Feauter_1 />
       {/* First CardList with its own slider class */}
-      <CardList
+      <MemoizedCardList
         title="Top Super Car Deal"
         data={data.car}
         sliderClassName="slider1"
+        isLoading={loading}
       />
       <MarqueeAnimation title={titleCar} desc={descCar} />{" "}
       {/* Scroll Notification */}
-      <CardList
+      <MemoizedCardList
         title="Clothing"
         data={data.clothing}
         sliderClassName="slider2"
+        isLoading={loading}
+        
       />
       <MarqueeAnimation title={titleOther} desc={descOther} />{" "}
       {/* Scroll Notification */}
-      <CardList
+      <MemoizedCardList
         title="Accessory"
         data={data.accessory}
         sliderClassName="slider3"
+        isLoading={loading}
       />
     </>
   );

@@ -10,11 +10,14 @@ import {
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { getCookie, clearCookie } from "../../../utils/security";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
 
 const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [focusedItem, setFocusedItem] = useState(null);
   const isMobile = useMediaQuery("(max-width:600px)");
+  const dispatch = useDispatch()
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -31,6 +34,7 @@ const Navbar = () => {
   const isLoggedIn = getCookie("access_token"); 
   const handleLogout = () => {
     clearCookie(); 
+    dispatch(logout())
     window.location.href = "/sign-in";
   };
 

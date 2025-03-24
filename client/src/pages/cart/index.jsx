@@ -1,32 +1,26 @@
+import { useEffect, useState } from "react";
 import CardCart from "../../components/Card/CardCart";
-
-const data = [
-  {
-    id: 1,
-    name: "Premium Wireless Headphones",
-    price: 199.99,
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-  },
-  {
-    id: 2,
-    name: "Smart Watch Series 5",
-    price: 299.99,
-    quantity: 2,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-  },
-  {
-    id: 3,
-    name: "Laptop Pro 2023",
-    price: 1299.99,
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
-  },
-];
+import { getCart } from "../../services/CartService";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [data, setData] = useState([]); 
 
-  return <><CardCart initialCartItems={data} /></>;
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getCart(user.email);
+      console.log("[+] Response: ", response);
+
+      if (response.success) {
+        setData(response.cartItems)
+      }
+    };
+    fetchData();
+  }, []); 
+ 
+
+  return <CardCart initialCartItems={data} />;
 };
 
 export default Cart;

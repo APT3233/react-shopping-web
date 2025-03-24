@@ -8,6 +8,8 @@ import { getCategories } from "../../../services/Categories";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import "../../../assets/css/header.css";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
 
 export default function Header() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -15,13 +17,15 @@ export default function Header() {
   const [isHidden, setIsHidden] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
 
   const isLoggedIn = getCookie("access_token");
 
   const handleLogout = () => {
     clearCookie();
-    window.location.href = "/sign-in";
+    dispatch(logout());
+    navigate("/sign-in");
   };
 
   const enterLoading = (index) => {
@@ -31,15 +35,13 @@ export default function Header() {
       return newLoadings;
     });
     setTimeout(() => {
-      handleSearch()
+      handleSearch();
       setLoadings((prevLoadings) => {
         const newLoadings = [...prevLoadings];
         newLoadings[index] = false;
         return newLoadings;
       });
-      
     }, 2000);
-    
   };
 
   const className = (e) => {
@@ -130,7 +132,6 @@ export default function Header() {
                     placeholder="Search category "
                     value={selectedItems}
                     onChange={setSelectedItems}
-                    
                     style={{
                       width: "100%",
                       marginRight: "10px",
@@ -145,7 +146,7 @@ export default function Header() {
                     type="primary"
                     loading={loadings[0]}
                     onClick={() => {
-                      enterLoading(0)
+                      enterLoading(0);
                       // handleSearch()
                     }}
                     style={{ backgroundColor: "#202738" }}
@@ -156,14 +157,16 @@ export default function Header() {
               </Col>
               <Col xs={4} sm={4} lg={6}>
                 <div className="header-info">
-                  <AccountCircleOutlinedIcon
-                    style={{
-                      cursor: "pointer",
-                      fill: "currentcolor",
-                      color: "rgb(125, 135, 156)",
-                    }}
-                  />
-                  <NavLink to="#" className={className}>
+                  <NavLink to="/profile" className={className}>
+                    <AccountCircleOutlinedIcon
+                      style={{
+                        cursor: "pointer",
+                        fill: "currentcolor",
+                        color: "rgb(125, 135, 156)",
+                      }}
+                    />
+                  </NavLink>
+                  <NavLink to="/cart" className={className}>
                     <ShoppingBagOutlinedIcon
                       style={{
                         cursor: "pointer",

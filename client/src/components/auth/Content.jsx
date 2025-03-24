@@ -9,7 +9,7 @@ import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import { SitemarkIcon } from './CustomIcons';
 import logo from "../../assets/img/logo.png"
 import { useNavigate } from 'react-router-dom';
-
+import "animate.css"
 const items = [
   {
     icon: <SettingsSuggestRoundedIcon sx={{ color: 'text.secondary' }} />,
@@ -43,13 +43,14 @@ export default function Content() {
   return (
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
+      
     >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
         {/* <SitemarkIcon /> */}
         <img src={logo} alt='logo' style={{width: "90px", cursor: "pointer"}} onClick={()=>navigate('/')}/>
       </Box>
       {items.map((item, index) => (
-        <Stack key={index} direction="row" sx={{ gap: 2 }}>
+        <Stack key={index} direction="row" sx={{ gap: 2 }} >
           {item.icon}
           <div>
             <Typography gutterBottom sx={{ fontWeight: 'medium' }}>

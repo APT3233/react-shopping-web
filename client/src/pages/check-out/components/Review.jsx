@@ -1,36 +1,84 @@
-import * as React from 'react';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type:', detail: 'Visa' },
-  { name: 'Card holder:', detail: 'Mr. John Smith' },
-  { name: 'Card number:', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date:', detail: '04/2024' },
-];
+export default function Review({ cartdata, addressData, paymentData }) {
+  const cartItems = Array.isArray(cartdata)
+    ? cartdata
+    : cartdata?.cartItems || [];
 
-export default function Review() {
+  const calculateSubtotal = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.numberBuy,
+      0
+    );
+  };
+
+  const shippingCost = 9.99;
+  const total = calculateSubtotal() + shippingCost;
+
+  const addressFields = [
+    `${addressData.firstName || ""} ${addressData.lastName || ""}`,
+    addressData.phoneNumber || "",
+    addressData.address || "",
+    `${addressData.city || ""}, ${addressData.state || ""} ${
+      addressData.zip || ""
+    }`,
+    addressData.country || "",
+  ].filter(Boolean);
+
+  const paymentDetails =
+    paymentData.paymentType === "creditCard"
+      ? [
+          { name: "Card type:", detail: "Credit Card" },
+          { name: "Card holder:", detail: paymentData.cardName || "" },
+          {
+            name: "Card number:",
+            detail: paymentData.cardNumber
+              ? `xxxx-xxxx-xxxx-${paymentData.cardNumber.slice(-4)}`
+              : "",
+          },
+          { name: "Expiry date:", detail: paymentData.expDate || "" },
+        ]
+      : [
+          { name: "Method:", detail: "Bank Transfer" },
+          { name: "Bank:", detail: "MB Bank" },
+          {
+            name: "Account number:",
+            detail: import.meta.env.VITE_ROUTING_NUMBER,
+          },
+          {
+            name: "Routing number:",
+            detail: import.meta.env.VITE_ACCOUNT_NUMBER,
+          },
+          { name: "Transaction ID:", detail: paymentData.transactionId },
+        ];
+
   return (
     <Stack spacing={2}>
       <List disablePadding>
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Products" secondary="4 selected" />
-          <Typography variant="body2">$134.98</Typography>
+          <ListItemText
+            primary="Products"
+            secondary={`${cartItems.length} selected`}
+          />
+          <Typography variant="body2">
+            ${calculateSubtotal().toLocaleString()}
+          </Typography>
         </ListItem>
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Shipping" secondary="Plus taxes" />
-          <Typography variant="body2">$9.99</Typography>
+          <Typography variant="body2">${shippingCost.toFixed(2)}</Typography>
         </ListItem>
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $144.97
+            ${total.toLocaleString()}
           </Typography>
         </ListItem>
       </List>
@@ -45,28 +93,35 @@ export default function Review() {
           <Typography variant="subtitle2" gutterBottom>
             Shipment details
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom sx={{ color: 'text.secondary' }}>
-            {addresses.join(', ')}
-          </Typography>
+          {addressFields.map((line, index) => (
+            <Typography
+              key={index}
+              gutterBottom
+              sx={{ color: index > 0 ? "text.secondary" : "inherit" }}
+            >
+              {line}
+            </Typography>
+          ))}
         </div>
         <div>
           <Typography variant="subtitle2" gutterBottom>
             Payment details
           </Typography>
           <Grid container>
-            {payments.map((payment) => (
+            {paymentDetails.map((payment) => (
               <React.Fragment key={payment.name}>
                 <Stack
                   direction="row"
                   spacing={1}
                   useFlexGap
-                  sx={{ width: '100%', mb: 1 }}
+                  sx={{ width: "100%", mb: 1 }}
                 >
-                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body1" sx={{ color: "text.secondary" }}>
                     {payment.name}
                   </Typography>
-                  <Typography variant="body2">{payment.detail}</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+                    {payment.detail}
+                  </Typography>
                 </Stack>
               </React.Fragment>
             ))}

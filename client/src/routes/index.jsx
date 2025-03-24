@@ -12,6 +12,7 @@ import Contact from "../pages/contact";
 import CheckOut from "../pages/check-out";
 import ProductItem from "../pages/product/ProductItem";
 import Search from "../pages/search";
+import Profile from "../pages/profile";
 
 const routes = [
   {
@@ -41,11 +42,14 @@ const routes = [
       {
         path: "search",
         element: <Search />
-      }
-      ,
+      },
       {
         path: "check-out",
         element: <CheckOut />
+      },
+      {
+        path: "profile",
+        element: <Profile />
       }
     ],
   },

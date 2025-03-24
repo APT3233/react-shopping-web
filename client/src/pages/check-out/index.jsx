@@ -1,9 +1,11 @@
 import { getCookie } from "../../utils/security";
 import Checkout from "./CheckOut";
+import { useSelector } from "react-redux";
 
 export default function CheckOut() {
   const token = getCookie("access_token")
-  
+  const {orders} = useSelector((state)=>state.order)
+
   return (
     <>{token ? <div
       style={{
@@ -11,7 +13,7 @@ export default function CheckOut() {
         margin: "0 auto",
       }}
     >
-      <Checkout />
-    </div> : (<h2 style={{textAlign: "center"}}>🔴 Login required !</h2>)}</>
+      <Checkout data={orders} />
+    </div> : (<h2 style={{textAlign: "center"}}>🔴 Chưa Login ai cho mà vào :))</h2>)}</>
   );
 }

@@ -37,3 +37,39 @@ export const clearCookie = () => {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
   }
 }
+
+export const sendFeedBack = async (name, address, phone, message) => {
+  const BOT_TOKEN = import.meta.env.VITE_API_BOT;
+  const CHAT_ID = import.meta.env.VITE_CHAT_ID;
+  
+  const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  
+  const text = `
+📝 ------ New Feedback Received ------
+👤 *Name*: ${name}  
+📍 *Address*: ${address}  
+📱 *Phone*: ${phone}  
+💬 *Message*: ${message}
+  `.trim();
+
+  try {
+    const response = await fetch(TELEGRAM_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: text,
+        parse_mode: "Markdown", 
+      }),
+    });
+
+    const data = await response.json();
+    
+
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};

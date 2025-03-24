@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useNavigate} from "react-router-dom"
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -7,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import { Snackbar, Alert } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
@@ -17,32 +19,177 @@ import InfoMobile from "./components/InfoMobile";
 import PaymentForm from "./components/PaymentForm";
 import Review from "./components/Review";
 import "../../assets/css/checkout.css";
-import logo from "../../assets/img/logo.png"
+import logo from "../../assets/img/logo.png";
+import { updateCart } from "../../services/CartService";
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
-export default function Checkout(props) {
+const genTransactionId = (length) => {
+  let result = "";
+  for (let i = 0; i < length; i++) result += Math.floor(Math.random() * 10);
+  return result;
+};
+
+export default function Checkout({ data }) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [cartItems, setCartItems] = React.useState(data);
+  const [addressFormData, setAddressFormData] = React.useState({});
+  const [paymentFormData, setPaymentFormData] = React.useState({});
+  const [formIsValid, setFormIsValid] = React.useState(false);
+  const newTransactionId = genTransactionId(13);
+  const navigate = useNavigate();
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const requiredAddressFields = [
+    "firstName",
+    "lastName",
+    "phone",
+    "address",
+    "city",
+    "state",
+    "zip",
+    "country",
+  ];
+  const requiredPaymentFields = ["cardName", "cardNumber", "expDate", "cvv"];
+
+  const totalPrice = (
+    cartItems.reduce(
+      (sum, product) => sum + product.price * product.numberBuy,
+      0
+    ) + 9.99
+  ).toLocaleString();
+
+  const handleAddressFormChange = (data) => {
+    setAddressFormData(data);
+    const isValid = requiredAddressFields.every(
+      (field) => data[field] && data[field].trim() !== ""
+    );
+    setFormIsValid(isValid);
+  };
+
+  const handlePaymentFormChange = (data) => {
+    setPaymentFormData(data);
+    if (data.paymentType === "bankTransfer") {
+      setFormIsValid(true);
+    } else {
+      const isValid = requiredPaymentFields.every(
+        (field) => data[field] && data[field].trim() !== ""
+      );
+      setFormIsValid(isValid);
+    }
+  };
+
+  React.useEffect(() => {
+    if (activeStep === 0) {
+      const isValid = requiredAddressFields.every(
+        (field) =>
+          addressFormData[field] && addressFormData[field].trim() !== ""
+      );
+      setFormIsValid(isValid);
+    } else if (activeStep === 1) {
+      if (paymentFormData.paymentType === "bankTransfer") {
+        setFormIsValid(true);
+      } else {
+        const isValid = requiredPaymentFields.every(
+          (field) =>
+            paymentFormData[field] && paymentFormData[field].trim() !== ""
+        );
+        setFormIsValid(isValid);
+      }
+    } else if (activeStep === 2) {
+      setFormIsValid(true);
+    }
+  }, [activeStep, addressFormData, paymentFormData]);
+  React.useEffect(() => {
+    if (activeStep === 1 && !paymentFormData.transactionId) {
+      setPaymentFormData((prev) => ({
+        ...prev,
+        transactionId: newTransactionId,
+      }));
+    }
+  }, [activeStep, paymentFormData.transactionId]);
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return (
+          <AddressForm
+            onFormChange={handleAddressFormChange}
+            formData={addressFormData}
+          />
+        );
+      case 1:
+        return (
+          <PaymentForm
+            onFormChange={handlePaymentFormChange}
+            formData={paymentFormData}
+          />
+        );
+      case 2:
+        return (
+          <Review
+            addressData={addressFormData}
+            paymentData={paymentFormData}
+            cartdata={cartItems}
+            transactionId={newTransactionId}
+          />
+        );
+      default:
+        throw new Error("Unknown step");
+    }
+  }
+
   const handleNext = () => {
     setActiveStep(activeStep + 1);
+    if (activeStep < 2) {
+      setFormIsValid(false);
+    }
   };
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+  const handleSave = async () => {
+    const updateCartData = cartItems.map((item) => ({
+      orderId: item.orderId,
+      numberBuy: item.numberBuy,
+    }));
+    const address =
+      addressFormData.address +
+      "-" +
+      addressFormData.city +
+      "-" +
+      addressFormData.country;
+    const res = await updateCart(address, updateCartData);
+    if (res.success && res.message.includes("Items")) {
+      setSnackbar({
+        open: true,
+        message: "Payment successful",
+        severity: "success",
+      });
+    } else {
+      setSnackbar({
+        open: true,
+        message: res.message,
+        severity: "info",
+      });
+    }
+    setTimeout(() => {
+      handleNext()
+    }, 1000)
+
+  };
+  const handleButtonClick = () => {
+    if (activeStep === steps.length - 1) {
+      handleSave();
+    } else {
+      handleNext();
+    }
+  };
   return (
     <>
-      {/* <CssBaseline enableColorScheme /> */}
       <Grid
         container
         style={{
@@ -58,6 +205,10 @@ export default function Checkout(props) {
           },
           mt: {
             xs: 4,
+            sm: 0,
+          },
+          mb: {
+            xs: 15,
             sm: 0,
           },
         }}
@@ -79,8 +230,7 @@ export default function Checkout(props) {
             gap: 4,
           }}
         >
-          {/* <SitemarkIcon /> */}
-          <img src={logo} alt="logo" style={{width: "50px"}} />
+          <img src={logo} alt="logo" style={{ width: "50px" }} />
           <Box
             sx={{
               display: "flex",
@@ -90,7 +240,7 @@ export default function Checkout(props) {
               maxWidth: 500,
             }}
           >
-            <Info totalPrice={activeStep >= 2 ? "$144.97" : "$134.98"} />
+            <Info />
           </Box>
         </Grid>
         {/* End Left */}
@@ -161,11 +311,11 @@ export default function Checkout(props) {
                   Selected products
                 </Typography>
                 <Typography variant="body1">
-                  {activeStep >= 2 ? "$144.97" : "$134.98"}
+                  {totalPrice}
                 </Typography>
               </div>
               <InfoMobile
-                totalPrice={activeStep >= 2 ? "$144.97" : "$134.98"}
+                totalPrice={totalPrice}
               />
             </CardContent>
           </Card>
@@ -213,12 +363,14 @@ export default function Checkout(props) {
                 <Typography variant="h5">Thank you for your order!</Typography>
                 <Typography variant="body1" sx={{ color: "text.secondary" }}>
                   Your order number is
-                  <strong>&nbsp;#140396</strong>. We have emailed your order
+                  <strong> #140396</strong>. We have emailed your order
                   confirmation and will update you once its shipped.
                 </Typography>
-                <Button style={{backgroundColor: "#202738",}}
+                <Button
+                  style={{ backgroundColor: "#202738" }}
                   variant="contained"
                   sx={{ alignSelf: "start", width: { xs: "100%", sm: "auto" } }}
+                  onClick={()=>navigate('/profile')}
                 >
                   Go to my orders
                 </Button>
@@ -254,7 +406,7 @@ export default function Checkout(props) {
                     </Button>
                   )}
                   {activeStep !== 0 && (
-                    <Button 
+                    <Button
                       startIcon={<ChevronLeftRoundedIcon />}
                       onClick={handleBack}
                       variant="outlined"
@@ -264,13 +416,15 @@ export default function Checkout(props) {
                       Previous
                     </Button>
                   )}
-                  <Button style={{backgroundColor: "#202738",}}
+                  <Button
+                    style={{ backgroundColor: "#202738", color: "white" }}
                     variant="contained"
                     endIcon={<ChevronRightRoundedIcon />}
-                    onClick={handleNext}
+                    onClick={handleButtonClick}
+                    disabled={!formIsValid}
                     sx={{ width: { xs: "100%", sm: "fit-content" } }}
                   >
-                    {activeStep === steps.length - 1 ? "Place order" : "Next"}
+                    {activeStep === steps.length - 1 ? "Confirm" : "Next"}
                   </Button>
                 </Box>
               </React.Fragment>
@@ -278,6 +432,22 @@ export default function Checkout(props) {
           </Box>
         </Grid>
         {/* End Right */}
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          sx={{ mt: 10 }}
+        >
+          <Alert
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Grid>
     </>
   );

@@ -1,55 +1,42 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import PropTypes from "prop-types";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
 
-const products = [
-  {
-    name: 'Professional plan',
-    desc: 'Monthly subscription',
-    price: '$15.00',
-  },
-  {
-    name: 'Dedicated support',
-    desc: 'Included in the Professional plan',
-    price: 'Free',
-  },
-  {
-    name: 'Hardware',
-    desc: 'Devices needed for development',
-    price: '$69.99',
-  },
-  {
-    name: 'Landing page template',
-    desc: 'License',
-    price: '$49.99',
-  },
-];
+function Info() {
+  const {orders} = useSelector((state)=> state.order)
+  const data = orders
 
-function Info({ totalPrice }) {
+  const total = data.reduce((sum, product) => sum + product.price * product.numberBuy,0) + 9.99;
+
+
   return (
     <React.Fragment>
-      <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+      <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
         Total
       </Typography>
       <Typography variant="h4" gutterBottom>
-        {totalPrice}
+        <Typography variant="h6" component="span">
+          $
+        </Typography>
+        {total.toLocaleString()}
       </Typography>
       <List disablePadding>
-        {products.map((product) => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
+        {data.map((product) => (
+          <ListItem key={product.productName} sx={{ py: 1, px: 0 }}>
             <ListItemText
               sx={{ mr: 2 }}
-              primary={product.name}
-              secondary={product.desc}
+              primary={product.productName}
+              secondary={"Quantity: " + product.numberBuy}
             />
-            <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-              {product.price}
+            <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+              ${(product.price * product.numberBuy).toLocaleString()}
             </Typography>
           </ListItem>
-        ))}
+        )) }
       </List>
     </React.Fragment>
   );

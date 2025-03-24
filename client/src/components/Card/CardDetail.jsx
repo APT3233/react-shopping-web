@@ -22,9 +22,10 @@ import { MdZoomIn } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import { getCookie } from "../../utils/security";
 import { CONFIRM } from "../../utils/Alert";
+import { addToCart } from "../../services/CartService";
+import { useSelector } from "react-redux";
 
 const ProductImage = muiStyled(CardMedia)(({ theme }) => ({
-  // height: 400,
   borderRadius: "7px",
   objectFit: "contain",
   cursor: "zoom-in",
@@ -38,9 +39,14 @@ const ProductImage = muiStyled(CardMedia)(({ theme }) => ({
 
 const CardDetail = () => {
   const [quantity, setQuantity] = useState(1);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-
+  const [, setShowSnackbar] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const { user } = useSelector((state) => state.auth);
   const location = useLocation();
   const product = location.state?.product || {
     name: "",
@@ -57,20 +63,49 @@ const CardDetail = () => {
     if (newQuantity >= 1 && newQuantity <= product.quantity) {
       setQuantity(newQuantity);
     } else {
-      setSnackbarMessage(`Quantity must be between 1 and ${product.quantity}`);
+      handleAddStatus(`Quantity must be between 1 and ${product.quantity}`, 'info');
       setShowSnackbar(true);
     }
   };
 
-  const handleAddToCart = () => {
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    handleAddStatus("Link copied to clipboard!", 'success')
+    setShowSnackbar(true);
+  };
+
+  const handleAddStatus = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message: message,
+      severity: severity,
+    });
+  };
+  const handleAddToCart = async () => {
     const token = getCookie("access_token");
     if (!token) {
       CONFIRM("Login Required !", "Please login now", "warning", () => {
         window.location.href = "/sign-in";
       });
     } else {
-      setSnackbarMessage("Product added to cart!");
-      setShowSnackbar(true);
+      const result = await addToCart(
+        user.email,
+        product.productId,
+        product.price
+      );
+      console.log(result);
+      if (result.success) handleAddStatus("Added To Cart", "success");
+      else handleAddStatus(result?.error, "error");
+    }
+  };
+  const handleBuy = async () => {
+    const token = getCookie("access_token");
+    if (!token) {
+      CONFIRM("Login Required !", "Please login now", "warning", () => {
+        window.location.href = "/sign-in";
+      });
+    } else {
+      console.log(quantity);
     }
   };
 
@@ -120,14 +155,14 @@ const CardDetail = () => {
 
           <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
             <Typography variant="h5" color="error.main">
-              ${discountedPrice.toFixed(2)}
+              ${discountedPrice.toLocaleString()}
             </Typography>
             {product.discount > 0 && (
               <Typography
                 variant="body1"
                 sx={{ textDecoration: "line-through" }}
               >
-                ${product.price.toFixed(2)}
+                ${product.price.toLocaleString()}
               </Typography>
             )}
             <Chip
@@ -186,11 +221,13 @@ const CardDetail = () => {
               onClick={handleAddToCart}
               sx={{
                 borderRadius: 2,
+                background: "#202738",
                 textTransform: "none",
                 transition: "all 0.3s",
-                "&:hover": { transform: "translateY(-2px)" },
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                },
               }}
-              style={{ backgroundColor: "#202738" }}
             >
               Add to Cart
             </Button>
@@ -202,15 +239,18 @@ const CardDetail = () => {
                 borderRadius: 2,
                 textTransform: "none",
                 transition: "all 0.3s",
-                "&:hover": { transform: "translateY(-2px)" },
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                },
               }}
+              onClick={handleBuy}
             >
               Buy Now
             </Button>
-            <IconButton>
-              <FiHeart />
+            <IconButton onClick={()=>setIsLiked(!isLiked)}>
+              <FiHeart style={{ color: isLiked ? "red" : "inherit" }} />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={handleShare}>
               <FiShare2 />
             </IconButton>
           </Stack>
@@ -218,18 +258,14 @@ const CardDetail = () => {
       </Grid>
 
       <Snackbar
-        open={showSnackbar}
+        open={snackbar.open}
         autoHideDuration={3000}
-        onClose={() => setShowSnackbar(false)}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        sx={{ mt: 14 }}
+        sx={{ mt: 10 }}
       >
-        <Alert
-          onClose={() => setShowSnackbar(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
+        <Alert severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
         </Alert>
       </Snackbar>
     </Container>

@@ -1,6 +1,5 @@
 package com.apt.controller;
 
-import com.apt.dao.ProductDAO;
 import com.apt.model.Product;
 import com.apt.services.ProductService;
 import com.apt.services.impl.ProductServiceImpl;
@@ -8,7 +7,6 @@ import com.apt.services.impl.ProductServiceImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gson.Gson;
 
