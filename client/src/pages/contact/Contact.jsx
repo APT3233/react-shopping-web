@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Grid,
@@ -17,9 +17,11 @@ import {
 import { styled } from "@mui/material/styles";
 import { Spin } from "antd";
 import { sendFeedBack } from "../../utils/security";
-import 'animate.css';
+import "animate.css";
+import AnimatedWrapper from "../../components/ui/animation"; // Import the AnimatedWrapper component
+import { noop } from "antd/es/_util/warning";
 
-// Styled Components
+// Styled Components remain the same
 const StyledPaper = styled(Paper)(() => ({
   padding: "2rem",
   height: "100%",
@@ -55,8 +57,8 @@ const TeamMemberCard = styled(Card)(() => ({
   },
 }));
 
-const ContactCart = ({teamMembers}) => {
-    const [formData, setFormData] = useState({
+const ContactCart = ({ teamMembers }) => {
+  const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
@@ -127,160 +129,198 @@ const ContactCart = ({teamMembers}) => {
   return (
     <Container maxWidth="lg" sx={{ py: 8 }}>
       {/* Introduce team */}
-      <Box sx={{ mb: 8 }} className="animate__animated animate__fadeInUpBig">
-        <StyledTitle >Meet Our Expert Team</StyledTitle>
-        <Grid container spacing={4} >
+      <AnimatedWrapper aosAnimation="fade-up" aosDuration={1000} aosDelay={200}>
+        <StyledTitle>Meet Our Expert Team</StyledTitle>
+        <Grid container spacing={4}>
           {teamMembers.map((member, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <TeamMemberCard>
-                <CardContent sx={{ textAlign: "center", p: 4 }}>
-                  <Avatar
-                    src={member.avatar}
-                    sx={{
-                      width: 140,
-                      height: 140,
-                      margin: "0 auto 1.5rem auto",
-                      border: "4px solid white",
-                      boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-                    }}
-                  />
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
-                    {member.name}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="primary"
-                    sx={{ fontWeight: 500 }}
-                  >
-                    {member.role}
-                  </Typography>
-                </CardContent>
-              </TeamMemberCard>
+              <AnimatedWrapper
+                aosAnimation="fade-up"
+                aosDuration={1000}
+                aosDelay={index * 200}
+              >
+                <TeamMemberCard>
+                  <CardContent sx={{ textAlign: "center", p: 4 }}>
+                    <Avatar
+                      src={member.avatar}
+                      sx={{
+                        width: 140,
+                        height: 140,
+                        margin: "0 auto 1.5rem auto",
+                        border: "4px solid white",
+                        boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+                      }}
+                    />
+                    <Typography
+                      variant="h5"
+                      gutterBottom
+                      sx={{ fontWeight: 600 }}
+                    >
+                      {member.name}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="primary"
+                      sx={{ fontWeight: 500 }}
+                    >
+                      {member.role}
+                    </Typography>
+                    <Typography
+                      variant="subtitle3"
+                      color="secondary2"
+                      sx={{ textDecoration: "none" }}
+                      component="a"
+                      href={member.link}
+                      target="_blank"
+                      rel="nopener noreferrer"
+                    >
+                      view{" "}
+                    </Typography>
+                  </CardContent>
+                </TeamMemberCard>
+              </AnimatedWrapper>
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </AnimatedWrapper>
 
       {/* form Contact */}
-      <StyledTitle style={{ color: "#202738" }}>Thanks for using!</StyledTitle>
+      <AnimatedWrapper aosAnimation="zoom-in" aosDuration={1000} aosDelay={300}>
+        <StyledTitle style={{ color: "#202738", marginTop: "50px" }}>
+          Thanks for using!
+        </StyledTitle>
+      </AnimatedWrapper>
+
       <Grid container spacing={4}>
-        <Grid item xs={12} md={5} className="animate__bounceInLeft">
-          <StyledPaper>
-            <Typography
-              variant="h4"
-              gutterBottom
-              color="primary"
-              style={{ color: "#202738" }}
-            >
-              Our Office
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <Box
-                component="img"
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c"
-                alt="Office Interior"
-                sx={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                  mb: 2,
-                }}
-              />
-              <Box
-                component="img"
-                src="https://images.unsplash.com/photo-1497366811353-6870744d04b2"
-                alt="Meeting Room"
-                sx={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-            </Box>
-          </StyledPaper>
+        <Grid item xs={12} md={5}>
+          <AnimatedWrapper
+            aosAnimation="fade-right"
+            aosDuration={1000}
+            aosDelay={300}
+          >
+            <StyledPaper>
+              <Typography
+                variant="h4"
+                gutterBottom
+                color="primary"
+                style={{ color: "#202738" }}
+              >
+                Our Office
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Box
+                  component="img"
+                  src="https://images.unsplash.com/photo-1497366216548-37526070297c"
+                  alt="Office Interior"
+                  sx={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                    mb: 2,
+                  }}
+                />
+                <Box
+                  component="img"
+                  src="https://images.unsplash.com/photo-1497366811353-6870744d04b2"
+                  alt="Meeting Room"
+                  sx={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+              </Box>
+            </StyledPaper>
+          </AnimatedWrapper>
         </Grid>
 
-        <Grid item xs={12} md={7} className="animate__bounceInRight">
-          <StyledPaper component="form" onSubmit={handleSubmit}>
-            <Typography
-              variant="h4"
-              gutterBottom
-              color="primary"
-              style={{ color: "#202738" }}
-            >
-              Send Us a Message
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Full Name"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  error={!!errors.fullName}
-                  helperText={errors.fullName}
-                  required
-                />
+        <Grid item xs={12} md={7}>
+          <AnimatedWrapper
+            aosAnimation="fade-left"
+            aosDuration={1000}
+            aosDelay={300}
+          >
+            <StyledPaper component="form" onSubmit={handleSubmit}>
+              <Typography
+                variant="h4"
+                gutterBottom
+                color="primary"
+                style={{ color: "#202738" }}
+              >
+                Send Us a Message
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Full Name"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    error={!!errors.fullName}
+                    helperText={errors.fullName}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    error={!!errors.phone}
+                    helperText={errors.phone}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Message"
+                    name="message"
+                    multiline
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    error={!!errors.message}
+                    helperText={errors.message}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    disabled={loading}
+                    sx={{ height: "50px", backgroundColor: "#202738" }}
+                  >
+                    {loading ? <Spin /> : "Send Message"}
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  error={!!errors.email}
-                  helperText={errors.email}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Phone Number"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  error={!!errors.phone}
-                  helperText={errors.phone}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Message"
-                  name="message"
-                  multiline
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  error={!!errors.message}
-                  helperText={errors.message}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                  disabled={loading}
-                  sx={{ height: "50px", backgroundColor: "#202738" }}
-                >
-                  {loading ? <Spin /> : "Send Message"}
-                </Button>
-              </Grid>
-            </Grid>
-          </StyledPaper>
+            </StyledPaper>
+          </AnimatedWrapper>
         </Grid>
       </Grid>
 

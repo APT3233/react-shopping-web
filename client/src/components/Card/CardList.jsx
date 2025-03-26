@@ -24,10 +24,24 @@ import { getCookie } from "../../utils/security";
 import { CONFIRM } from "../../utils/Alert";
 import { addToCart } from "../../services/CartService";
 import { useSelector } from "react-redux";
-import AnimatedWrapper from "../ui/animation"
+import AnimatedWrapper from "../ui/animation";
 
 // Styled components
-const StyledCard = styled(Card)(() => ({
+// const StyledCard = styled(Card)(() => ({
+//   height: "100%",
+//   width: "90%",
+//   display: "flex",
+//   flexDirection: "column",
+//   borderRadius: "16px",
+//   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+//   margin: "0 auto",
+//   "&:hover": {
+//     boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)",
+//   },
+// }));
+const StyledCard = styled(Card, {
+  shouldForwardProp: (prop) => prop !== "isOutOfStock",
+})(({ theme, isOutOfStock }) => ({
   height: "100%",
   width: "90%",
   display: "flex",
@@ -35,9 +49,36 @@ const StyledCard = styled(Card)(() => ({
   borderRadius: "16px",
   transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
   margin: "0 auto",
+  position: "relative",
+  opacity: isOutOfStock ? 0.5 : 1, 
+  filter: isOutOfStock ? "grayscale(100%)" : "none",
   "&:hover": {
     boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)",
   },
+}));
+
+const SoldOutOverlay = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(0, 0, 0, 0.6)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 10,
+  borderRadius: "16px",
+}));
+
+const SoldOutText = styled(Typography)(({ theme }) => ({
+  color: "white",
+  fontWeight: "bold",
+  fontSize: "1.5rem",
+  padding: "10px 20px",
+  backgroundColor: "rgba(255, 0, 0, 0.7)",
+  borderRadius: "8px",
+  transform: "rotate(-15deg)",
 }));
 
 const StyledCardMedia = styled(CardMedia)(() => ({
@@ -134,7 +175,7 @@ const CardList = ({ title, data, sliderClassName, isLoading = false }) => {
       severity: severity,
     });
   };
-  
+
   const handleCheckClick = async (item) => {
     const isLoggedIn = getCookie("access_token");
     if (!isLoggedIn) {
@@ -150,17 +191,39 @@ const CardList = ({ title, data, sliderClassName, isLoading = false }) => {
     }
   };
 
-  
   const SkeletonCard = () => (
     <div style={{ margin: "0 10px" }}>
       <StyledCard>
         <Skeleton variant="rectangular" height={250} animation="wave" />
         <CardContent sx={{ p: 3 }}>
           <Skeleton variant="text" width="40%" height={20} animation="wave" />
-          <Skeleton variant="text" width="70%" height={30} animation="wave" sx={{ my: 1 }} />
-          <Skeleton variant="text" width="30%" height={30} animation="wave" sx={{ mb: 1 }} />
-          <Skeleton variant="text" width="60%" height={24} animation="wave" sx={{ mb: 2 }} />
-          <Skeleton variant="rectangular" height={40} width="100%" animation="wave" />
+          <Skeleton
+            variant="text"
+            width="70%"
+            height={30}
+            animation="wave"
+            sx={{ my: 1 }}
+          />
+          <Skeleton
+            variant="text"
+            width="30%"
+            height={30}
+            animation="wave"
+            sx={{ mb: 1 }}
+          />
+          <Skeleton
+            variant="text"
+            width="60%"
+            height={24}
+            animation="wave"
+            sx={{ mb: 2 }}
+          />
+          <Skeleton
+            variant="rectangular"
+            height={40}
+            width="100%"
+            animation="wave"
+          />
         </CardContent>
       </StyledCard>
     </div>
@@ -170,9 +233,9 @@ const CardList = ({ title, data, sliderClassName, isLoading = false }) => {
     return (
       <>
         <CardTitle title={title} />
-        <AnimatedWrapper 
-          aosAnimation="fade-up" 
-          aosDuration={1200} 
+        <AnimatedWrapper
+          aosAnimation="fade-up"
+          aosDuration={1200}
           aosDelay={200}
         >
           <Container maxWidth="xl" sx={{ position: "relative", py: 6 }}>
@@ -200,117 +263,126 @@ const CardList = ({ title, data, sliderClassName, isLoading = false }) => {
   return (
     <>
       <CardTitle title={title} />
-      <AnimatedWrapper 
-        aosAnimation="fade-up" 
-        aosDuration={1200} 
-        aosDelay={300}
-      >
+      <AnimatedWrapper aosAnimation="fade-up" aosDuration={1200} aosDelay={300}>
         <Container maxWidth="xl" sx={{ position: "relative", py: 6 }}>
           <Slider {...settings} className={sliderClassName}>
-            {products.map((product, index) => (
+          {products.map((product, index) => (
               <div key={index} style={{ margin: "0 10px" }}>
-                {/* <AnimatedWrapper 
-                  aosAnimation="fade-up" 
-                  aosDuration={800} 
-                  aosDelay={100 + index * 50} // Staggered delay based on index
-                > */}
-                  <StyledCard tabIndex={0} aria-label={`Product: ${product.name}`}>
-                    <StyledCardMedia
-                      component="img"
-                      height="250"
-                      image={product.imgLink}
-                      alt={product.name}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://images.unsplash.com/photo-1560393464-5c69a73c5770";
+                <StyledCard 
+                  tabIndex={0} 
+                  aria-label={`Product: ${product.name}`}
+                  isOutOfStock={product.quantity === 0} // Pass out of stock status
+                >
+                  {product.quantity === 0 && (
+                    <SoldOutOverlay>
+                      <SoldOutText>Sold Out</SoldOutText>
+                    </SoldOutOverlay>
+                  )}
+                  <StyledCardMedia
+                    component="img"
+                    height="250"
+                    image={product.imgLink}
+                    alt={product.name}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://images.unsplash.com/photo-1560393464-5c69a73c5770";
+                    }}
+                    onClick={() =>
+                      navigate(`/product/detail/${product.productId}`, {
+                        state: { product },
+                      })
+                    }
+                  />
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        mb: 1,
                       }}
-                      onClick={() =>
-                        navigate(`/product/detail/${product.productId}`, {
-                          state: { product },
-                        })
-                      }
-                    />
-                    <CardContent sx={{ p: 3 }}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          mb: 1,
-                        }}
-                      >
-                        {product.category}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h6"
-                        component="div"
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: "1.1rem",
-                          mb: 1,
-                        }}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        variant="h6"
-                        color="primary"
-                        sx={{
-                          fontWeight: 700,
-                          mb: 1,
-                        }}
-                      >
-                        {`$${product.price.toLocaleString()}`}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          mb: 1,
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {/* Render filled stars based on the rating */}
-                        {Array.from({ length: 5 }, (_, index) =>
-                          index < Math.floor(product.rating) ? (
-                            <Star
-                              key={index}
-                              sx={{ color: "gold", fontSize: "1rem" }}
-                            />
-                          ) : (
-                            <StarBorder
-                              key={index}
-                              sx={{ color: "gold", fontSize: "1rem" }}
-                            />
-                          )
-                        )}
-                        {/* Display the rating and reviews count */}
-                        <span style={{ marginLeft: "8px" }}>
-                          {`(${product.reviews} reviews)`}
-                        </span>
-                      </Typography>
-                      <AddToCartButton
-                        variant="contained"
-                        startIcon={<FaShoppingCart />}
-                        fullWidth
-                        onClick={() => handleCheckClick(product)}
-                      >
-                        Add to Cart
-                      </AddToCartButton>
-                    </CardContent>
-                  </StyledCard>
-                {/* </AnimatedWrapper> */}
+                    >
+                      {product.category}
+                    </Typography>
+                    <Typography
+                      gutterBottom
+                      variant="h6"
+                      component="div"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "1.1rem",
+                        mb: 1,
+                        ...(product.quantity === 0 && { color: 'text.disabled' }),
+                      }}
+                    >
+                      {product.name}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      color={product.quantity === 0 ? "text.disabled" : "primary"}
+                      sx={{
+                        fontWeight: 700,
+                        mb: 1,
+                      }}
+                    >
+                      {`$${product.price.toLocaleString()}`}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color={product.quantity === 0 ? "text.disabled" : "text.secondary"}
+                      sx={{
+                        mb: 1,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {/* Render filled stars based on the rating */}
+                      {Array.from({ length: 5 }, (_, index) =>
+                        index < Math.floor(product.rating) ? (
+                          <Star
+                            key={index}
+                            sx={{ 
+                              color: product.quantity === 0 ? "gray" : "gold", 
+                              fontSize: "1rem" 
+                            }}
+                          />
+                        ) : (
+                          <StarBorder
+                            key={index}
+                            sx={{ 
+                              color: product.quantity === 0 ? "gray" : "gold", 
+                              fontSize: "1rem" 
+                            }}
+                          />
+                        )
+                      )}
+                      {/* Display the rating and reviews count */}
+                      <span style={{ marginLeft: "8px" }}>
+                        {`(${product.reviews} reviews)`}
+                      </span>
+                    </Typography>
+                    <AddToCartButton
+                      variant="contained"
+                      startIcon={<FaShoppingCart />}
+                      fullWidth
+                      onClick={() => handleCheckClick(product)}
+                      disabled={product.quantity === 0}
+                    >
+                      {product.quantity === 0 ? "Out of Stock" : "Add to Cart"}
+                    </AddToCartButton>
+                  </CardContent>
+                </StyledCard>
               </div>
             ))}
           </Slider>
-          
+
           {/* Navigation Buttons */}
           <AnimatedWrapper animation="fadeIn" duration="1.2s" delay="0.5s">
             <NavigationButton
               onClick={() =>
-                document.querySelector(`.${sliderClassName} .slick-prev`).click()
+                document
+                  .querySelector(`.${sliderClassName} .slick-prev`)
+                  .click()
               }
               aria-label="Previous"
               sx={{ left: -50 }}
@@ -318,11 +390,13 @@ const CardList = ({ title, data, sliderClassName, isLoading = false }) => {
               &#10094;
             </NavigationButton>
           </AnimatedWrapper>
-          
+
           <AnimatedWrapper animation="fadeIn" duration="1.2s" delay="0.5s">
             <NavigationButton
               onClick={() =>
-                document.querySelector(`.${sliderClassName} .slick-next`).click()
+                document
+                  .querySelector(`.${sliderClassName} .slick-next`)
+                  .click()
               }
               aria-label="Next"
               sx={{ right: -50 }}

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import UserProfile from "./UserProfile";
 import { useSelector } from "react-redux";
 import { Box, Alert, Stack } from "@mui/material";
@@ -6,11 +5,6 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 export default function Profile() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    console.log("Auth status:", isAuthenticated);
-  }, [isAuthenticated, user]);
 
   if (!isAuthenticated) {
     return (

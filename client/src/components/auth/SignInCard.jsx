@@ -21,6 +21,7 @@ import { ALERT } from "../../utils/Alert";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/slices/authSlice";
 import "animate.css";
+import { Spin } from "antd";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -47,6 +48,7 @@ export default function SignInCard() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [loading,setLoading] = React.useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -115,12 +117,13 @@ export default function SignInCard() {
   };
 
   const handleSubmit = async (event) => {
+    
     if (emailError || passwordError) {
       event.preventDefault();
       return;
     }
     event.preventDefault();
-
+    setLoading(true)
     // animation when submit form
     const submitButton = document.querySelector(".submit-button-animate");
     if (submitButton) {
@@ -177,6 +180,8 @@ export default function SignInCard() {
           card.classList.remove("animate__shakeX");
         }, 1000);
       }
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -311,7 +316,7 @@ export default function SignInCard() {
           onClick={validateInputs}
           className="form-field-animate submit-button-animate"
         >
-          Sign in
+          {loading ? <Spin /> : "Sign in"}
         </Button>
         <Typography
           sx={{ textAlign: "center" }}

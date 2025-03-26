@@ -36,7 +36,7 @@ import {
 import { FaEdit, FaSearch, FaSave, FaTimes } from "react-icons/fa";
 import { MdCloudUpload } from "react-icons/md";
 import instance from "../../utils/customizeAxios";
-import AnimatedWrapper from "../../components/ui/animation"; // Đảm bảo đường dẫn đúng tới file AnimatedWrapper
+import AnimatedWrapper from "../../components/ui/animation";
 
 const StyledAvatar = styled(Avatar)(() => ({
   width: 180,

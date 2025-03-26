@@ -25,8 +25,8 @@ import { signUp } from "../../services/Auth";
 import { ALERT } from "../../utils/Alert";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/slices/authSlice";
-// Import animate.css
 import 'animate.css';
+import { Spin } from "antd";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -125,6 +125,7 @@ export default function SignUp(props) {
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState("");
   const [animate, setAnimate] = useState(false);
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -176,7 +177,7 @@ export default function SignUp(props) {
       return;
     }
     event.preventDefault();
-    
+    setLoading(true)
     // Add button animation on submit
     const submitButton = event.currentTarget.querySelector('button[type="submit"]');
     if (submitButton) {
@@ -191,16 +192,16 @@ export default function SignUp(props) {
       const password = data.get("password");
 
       const response = await signUp(name, email, password);
-      
+      console.log(email)
       if (response.success) {
-        setCookie("access_token", response?.access_token, 10);
-        const dataUser = {
-          email: email,
-          role: 'user'
-        };
-        dispatch(loginSuccess({data: dataUser, token: response.access_token}));
-        ALERT("SignUp Successfully", "Welcome our shop", "success", () => {
-          navigate("/");
+        // setCookie("access_token", response?.access_token, 10);
+        // const dataUser = {
+        //   email: email,
+        //   role: 'user'
+        // };
+        // dispatch(loginSuccess({user: dataUser, token: response.access_token}));
+        ALERT("SignUp Successfully", "Please login !", "success", () => {
+          navigate("/sign-in");
         });
       } else {
         // Add shake animation for error
@@ -214,6 +215,8 @@ export default function SignUp(props) {
       }
     } catch (error) {
       console.log(error);
+    } finally { 
+      setLoading(false)
     }
   };
 
@@ -235,7 +238,7 @@ export default function SignUp(props) {
             className="animate__animated animate__fadeInDown"
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
-            Sign up
+            {loading ? <Spin /> : "Sign up"}
           </AnimatedTypography>
           <Box
             component="form"
