@@ -244,6 +244,7 @@ const CardDetail = () => {
                 },
               }}
               onClick={handleBuy}
+              disabled
             >
               Buy Now
             </Button>

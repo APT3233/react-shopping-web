@@ -20,7 +20,6 @@ const Search = () => {
       });
       if (response.status === 200) {
         const products = response.data;
-        console.log("API Data:", products); // Debug dữ liệu từ API
         const car = products.filter((product) => product.categoryId === 3);
         const clothing = products.filter((product) => product.categoryId === 2);
         const accessory = products.filter((product) => product.categoryId === 1);
@@ -30,7 +29,6 @@ const Search = () => {
           clothing,
           accessory,
         });
-        console.log("Filtered Data:", { car, clothing, accessory }); // Debug dữ liệu sau lọc
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -43,7 +41,6 @@ const Search = () => {
     const queryParams = new URLSearchParams(location.search);
     const categories = queryParams.get("categories");
     if (categories) {
-      console.log("Search categories: " + categories);
       fetchData(categories);
     } else {
       fetchData("");

@@ -10,7 +10,6 @@ const Cart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getCart(user.email);
-      console.log("[+] Response: ", response);
 
       if (response.success) {
         setData(response.cartItems)

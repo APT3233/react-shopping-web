@@ -40,8 +40,8 @@ const dataBanner = [
 const dataBanner_2 = [
   {
     id: 1,
-    title: "GAMING 4K",
-    sale: "DESKTOPS & LAPTOPS",
+    title: "Accessory",
+    sale: "Gifts & souvenirs",
 
     imgLink: banner_1,
   },

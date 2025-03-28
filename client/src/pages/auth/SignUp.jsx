@@ -192,7 +192,6 @@ export default function SignUp(props) {
       const password = data.get("password");
 
       const response = await signUp(name, email, password);
-      console.log(email)
       if (response.success) {
         // setCookie("access_token", response?.access_token, 10);
         // const dataUser = {
